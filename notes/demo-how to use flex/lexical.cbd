@@ -1,0 +1,4 @@
+digit [0-9]
+%%
+{digit}+ {printf("Interger value %d\n", atoi(yytext));}
+%%
