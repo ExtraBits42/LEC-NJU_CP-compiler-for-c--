@@ -6,7 +6,7 @@
 
 ## GNU Flex使用流程
 - 编写描述词法规则的文件：
-    - 文件后缀名可为任意后缀，如:lexical.l, lexical.cbd...
+    - 文件后缀名可为任意后缀，如:lexical.l(建议使用.l后缀), lexical.cbd...
 
 - 执行命令`flex <file_name>`，利用Flex对描述词法规则的文件进行编译，生成`<file_name>.yy.c`的C语言源代码：
     - e.g. flex lexical.l

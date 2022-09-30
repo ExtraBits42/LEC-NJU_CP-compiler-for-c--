@@ -9,4 +9,4 @@ flex-t: main.c lexical.l test.cmm
 
 # clean unnecessary middle files
 clean:
-	rm -rf scanner lex.yy.c
+	rm -rf scanner lex.yy.c scanner

@@ -66,6 +66,7 @@ DOT "."
 . {
     /*Type A: fault report*/
     printf("Error type A at Line %d: Mysterious characters \'%s\'\n", yylineno, yytext);
+    return -1;
 }
 %%
 

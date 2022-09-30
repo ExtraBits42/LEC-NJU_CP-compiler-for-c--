@@ -13,6 +13,9 @@ int main(int argc, char** argv){
         }
     }
     int tmp = 0;
-    while(yylex() != 0);
+    do{
+        tmp = yylex();
+        if(tmp == -1) break;
+    } while(tmp != 0);
     return 0;
 }
