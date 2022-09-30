@@ -1,3 +1,6 @@
+%{
+    #include "syntax.tab.h"    
+%}
 /*integer data*/
 INT10 ([0-9])|([1-9][0-9]+)
 INT8 [0][1-7][0-7]+
@@ -35,38 +38,55 @@ RB "]"
 LC "{"
 RC "}"
 /*others*/
-SEMT ";"
+SEMI ";"
 COMMA ","
 DOT "."
 %%
-{INT10} {printf("\033[36mINT10:\033[0m%d", atoi(yytext));}
-{INT8} {printf("\033[36mINT8:\033[0m%s", yytext);}
-{INT16} {printf("\033[36mINT16:\033[0m%s", yytext);}
+{INT10} {printf("\033[36m%d\033[0m", atoi(yytext)); return INT;}
+{INT8} {printf("\033[36m%s\033[0m", yytext); return INT;}
+{INT16} {printf("\033[36m%s\033[0m", yytext); return INT;}
 
-{FLOAT} {printf("\033[36mFLOAT:\033[0m%s", yytext);}
-{FLOATE} {printf("\033[36mFLOATE:\033[0m%s", yytext);}
+{FLOAT} {printf("\033[36m%s\033[0m", yytext); return FLOAT;}
+{FLOATE} {printf("\033[36m%s\033[0m", yytext); return FLOAT;}
 
-{TYPE}|{STRUCT}|{RETURN}|{IF}|{ELSE}|{WHILE} {printf("\033[36mKEY_WORD:\033[0m%s", yytext);}
+{TYPE} {printf("\033[36m%s\033[0m", yytext); return TYPE;}
+{STRUCT} {printf("\033[36m%s\033[0m", yytext); return STRUCT;}
+{RETURN} {printf("\033[36m%s\033[0m", yytext); return RETURN;}
+{IF} {printf("\033[36m%s\033[0m", yytext); return IF;}
+{ELSE} {printf("\033[36m%s\033[0m", yytext); return ELSE;}
+{WHILE} {printf("\033[36m%s\033[0m", yytext); return WHILE;}
 
-{ID} {printf("\033[36mID:\033[0m%s", yytext);}
+{ID} {printf("\033[36m%s\033[0m", yytext); return ID;}
 
-{AND}|{OR}|{NOT} {printf("\033[36mLOGIC Op:\033[0m%s", yytext);}
-{PLUS}|{MINUS}|{STAR}|{DIV} {printf("\033[36mMATH Op:\033[0m%s", yytext);}
+{AND} {printf("\033[36m%s\033[0m", yytext); return AND;}
+{OR} {printf("\033[36m%s\033[0m", yytext); return OR;}
+{NOT} {printf("\033[36m%s\033[0m", yytext); return NOT;}
 
-{RELOP} {printf("\033[36mCOMPARE Op:\033[0m%s", yytext);}
+{PLUS} {printf("\033[36m%s\033[0m", yytext); return PLUS;}
+{MINUS} {printf("\033[36m%s\033[0m", yytext); return MINUS;}
+{STAR} {printf("\033[36m%s\033[0m", yytext); return STAR;}
+{DIV} {printf("\033[36m%s\033[0m", yytext); return DIV;}
 
-{ASSIGNOP} {printf("\033[36mASSIGN Op:\033[0m%s", yytext);}
+{RELOP} {printf("\033[36m%s\033[0m", yytext); return RELOP;}
 
-{LP}|{RP}|{LB}|{RB}|{LC}|{RC} {printf("\033[36mPARENTH:\033[0m%s", yytext);}
+{ASSIGNOP} {printf("\033[36m%s\033[0m", yytext); return ASSIGNOP;}
 
-{SEMT}|{COMMA}|{DOT} {printf("\033[36mOTHER:\033[0m%s", yytext);}
+{LP} {printf("\033[36m%s\033[0m", yytext); return LP;}
+{RP} {printf("\033[36m%s\033[0m", yytext); return RP;}
+{LB} {printf("\033[36m%s\033[0m", yytext); return LB;}
+{RB} {printf("\033[36m%s\033[0m", yytext); return RB;}
+{LC} {printf("\033[36m%s\033[0m", yytext); return LC;}
+{RC} {printf("\033[36m%s\033[0m", yytext); return RC;} 
+
+{SEMI} {printf("\033[36m%s\033[0m", yytext); return SEMI;}
+{COMMA} {printf("\033[36m%s\033[0m", yytext); return COMMA;}
+{DOT} {printf("\033[36m%s\033[0m", yytext); return DOT;}
 
 [" ", \n]* {printf("%s", yytext);}
 
 . {
     /*Type A: fault report*/
     printf("Error type A at Line %d: Mysterious characters \'%s\'\n", yylineno, yytext);
-    return -1;
 }
 %%
 
