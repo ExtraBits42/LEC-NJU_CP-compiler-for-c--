@@ -1,14 +1,18 @@
 # include<stdio.h>
 # include<stdlib.h>
 
+/*declarations*/
 extern int yyleng;
 extern char* yytext;
 extern FILE* yyin;
 extern int yylex(void);
+extern int yyrestart(FILE* f);
+extern int yyparse();
 
+/*global variables*/
 int pass = 1;
-struct TreeNode* root = NULL;
 
+/*main function*/
 int main(int argc, char** argv){
     pass = 1;
 

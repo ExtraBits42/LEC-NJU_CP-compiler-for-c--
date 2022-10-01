@@ -1,19 +1,10 @@
 %{
     #include<stdio.h>
-    #include "sat_gen.c"
     #include "lex.yy.c"
-
-    int yycolumn = 1;
-    # define YY_USER_ACTION \
-        yylloc.first_line = yylloc.last_line = yylineno; \
-        yylloc.first_column = yycolumn; \
-        yylloc.last_column = yycolumn + yyleng - 1; \
-        yycolumn += yyleng;
+    extern int pass;
+    extern int yyerror(char* msg);
 %}
 
-%union{
-    struct TreeNode tree_node;
-}
 
 /*declared tokens*/
 %nonassoc LOWER_THAN_ELSE
