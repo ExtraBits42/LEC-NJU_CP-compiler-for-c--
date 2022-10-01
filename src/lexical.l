@@ -1,8 +1,8 @@
 %{
     #include "syntax.tab.h"
-    extern int pass;   
+    #include<stdio.h>
+    extern int pass;
 %}
-
 %option yylineno
 
 /*integer data*/
@@ -47,12 +47,12 @@ SEMI ";"
 COMMA ","
 DOT "."
 %%
-{INT10} {
-    return INT;
-}
+
+{INT10} {return INT;}
 {INT8}|{INT16} {return INT;}
 
-{FLOAT}|{FLOATE} {return FLOAT;}
+{FLOAT} {return FLOAT;}
+{FLOATE} {return FLOAT;}
 
 {TYPE} {return TYPE;}
 {STRUCT} {return STRUCT;}

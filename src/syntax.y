@@ -5,10 +5,7 @@
     extern int yyerror(char* msg);
 %}
 
-
 /*declared tokens*/
-%nonassoc LOWER_THAN_ELSE
-%nonassoc ELSE
 %token INT FLOAT
 %token TYPE STRUCT RETURN IF ELSE WHILE
 %token ID
@@ -20,6 +17,8 @@
 %token SEMI COMMA DOT
 
 /*declared associativity and priority*/
+%nonassoc LOWER_THAN_ELSE
+%nonassoc ELSE
 %right ASSIGNOP
 %left OR
 %left AND
@@ -28,6 +27,7 @@
 %left STAR DIV
 %right NOT
 %left LP RP LB RB DOT
+
 
 %%
 /*High-level Definitions*/
