@@ -8,24 +8,31 @@ flex-t: main.c lexical.l test.cmm
 	./scanner test.cmm
 
 bison-d: lexical.l syntax.y
+	flex lexical.l
 	bison -d syntax.y
 
-all: main.c syntax.tab.c
+all: main.c lexical.l syntax.y
+	make clean
+	make bison-d
+	make flex
 	gcc main.c syntax.tab.c -lfl -ly -o parser
 
+test: parser test.cmm
+	./parser ./test.cmm
+
 all-t:
-	./parser ./basic-testcases/tc01.cmm
-	./parser ./basic-testcases/tc02.cmm
-	./parser ./basic-testcases/tc03.cmm
-	./parser ./basic-testcases/tc04.cmm
+	./parser ../testcases/basic-testcases/tc01.cmm
+	./parser ../testcases/basic-testcases/tc02.cmm
+	./parser ../testcases/basic-testcases/tc03.cmm
+	./parser ../testcases/basic-testcases/tc04.cmm
 
 all-extt:
-	./parser ./ext-testcases/tc01.cmm
-	./parser ./ext-testcases/tc02.cmm
-	./parser ./ext-testcases/tc03.cmm
-	./parser ./ext-testcases/tc04.cmm
-	./parser ./ext-testcases/tc05.cmm
-	./parser ./ext-testcases/tc06.cmm
+	./parser ../testcases/ext-testcases/tc01.cmm
+	./parser ../testcases/ext-testcases/tc02.cmm
+	./parser ../testcases/ext-testcases/tc03.cmm
+	./parser ../testcases/ext-testcases/tc04.cmm
+	./parser ../testcases/ext-testcases/tc05.cmm
+	./parser ../testcases/ext-testcases/tc06.cmm
 
 # clean unnecessary middle files
 clean:
