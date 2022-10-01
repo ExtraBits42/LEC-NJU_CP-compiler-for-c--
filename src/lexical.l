@@ -1,5 +1,6 @@
 %{
-    #include "syntax.tab.h"    
+    #include "syntax.tab.h"
+    extern int pass;   
 %}
 
 %option yylineno
@@ -46,7 +47,10 @@ SEMI ";"
 COMMA ","
 DOT "."
 %%
-{INT10}|{INT8}|{INT16} {return INT;}
+{INT10} {
+    return INT;
+}
+{INT8}|{INT16} {return INT;}
 
 {FLOAT}|{FLOATE} {return FLOAT;}
 
@@ -88,6 +92,7 @@ DOT "."
 
 . {
     /*Type A: fault report*/
+    pass = 0;
     printf("Error type A at Line %d: Mysterious characters \'%s\'\n", yylineno, yytext);
 }
 %%

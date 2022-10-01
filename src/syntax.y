@@ -1,5 +1,6 @@
 %{
     #include<stdio.h>
+    #include "sat_gen.c"
     #include "lex.yy.c"
 
     int yycolumn = 1;
@@ -9,6 +10,10 @@
         yylloc.last_column = yycolumn + yyleng - 1; \
         yycolumn += yyleng;
 %}
+
+%union{
+    struct TreeNode tree_node;
+}
 
 /*declared tokens*/
 %nonassoc LOWER_THAN_ELSE
@@ -125,5 +130,6 @@ Args : Exp COMMA Args
 %%
 
 int yyerror(char* msg){
+    pass = 0;
     fprintf(stderr, "Error type B at Line %d: Something Wrong! %s\n", yylineno, yytext);
 }
