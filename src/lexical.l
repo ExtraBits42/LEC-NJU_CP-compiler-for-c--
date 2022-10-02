@@ -58,6 +58,10 @@ RC "}"
 SEMI ";"
 COMMA ","
 DOT "."
+
+/*annotation*/
+SCOMMENT "//"
+MCOMMENT "/*"
 %%
 
 
@@ -101,7 +105,24 @@ DOT "."
 {COMMA} {TOKENINIT_TVSAME("COMMA"); return COMMA;}
 {DOT} {TOKENINIT_TVSAME("DOT"); return DOT;}
 
-" "
+
+{SCOMMENT} {
+    char c = input();
+    while(c != '\n') c = input();
+}
+
+{MCOMMENT} {
+    int state = 0;
+    char c;
+    do{
+        c = input();
+        if(c == '*') state = 1;
+        else if(state == 1 && c == '/') state = 2;
+        else state = 0;
+    } while(state != 2);
+}
+
+" " {}
 \n {yycolumn = 1;}
 
 . {
