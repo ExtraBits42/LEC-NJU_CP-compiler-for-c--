@@ -1,12 +1,16 @@
 %{
     #include "sat_gen.h"
-    #define YYSTYPE Node
+    #define YYSTYPE Node*
     #include "syntax.tab.h"
     #include<stdio.h>
     extern int pass;
 
-    #define TOKENINIT yylval.ntype = LEXICAL; \
-                     yylval.u.lex_val = yytext;
+    #define TOKENINIT yylval = (Node *)malloc(sizeof(Node)); \
+                      yylval->ntype = LEXICAL; \
+                      yylval->u.lex_val = yytext; \
+                      yylval->child = NULL; \
+                      yylval->tail = NULL; \
+                      yylval->next = NULL;
 %}
 %option yylineno
 
@@ -54,14 +58,14 @@ DOT "."
 %%
 
 
-{INT10}|{INT8}|{INT16} {TOKENINIT; yylval.name = "INT"; return INT;}
+{INT10}|{INT8}|{INT16} {TOKENINIT; yylval->name = "INT"; return INT;}
 
-{FLOAT}|{FLOATE} {TOKENINIT; yylval.name = "FLOAT"; return FLOAT;}
+{FLOAT}|{FLOATE} {TOKENINIT; yylval->name = "FLOAT"; return FLOAT;}
 
-{TYPE} {TOKENINIT; yylval.name = "TYPE"; return TYPE;}
+{TYPE} {TOKENINIT; yylval->name = "TYPE"; return TYPE;}
 {STRUCT}|{RETURN}|{IF}|{ELSE}|{WHILE} {
     TOKENINIT;
-    yylval.name = "KEY_WORD";
+    yylval->name = "KEY_WORD";
     REJECT;
 }
 {STRUCT} {return STRUCT;}
@@ -70,11 +74,11 @@ DOT "."
 {ELSE} {return ELSE;}
 {WHILE} {return WHILE;}
 
-{ID} {TOKENINIT; yylval.name = "ID"; return ID;}
+{ID} {TOKENINIT; yylval->name = "ID"; return ID;}
 
 {AND}|{OR}|{NOT}|{PLUS}|{MINUS}|{STAR}|{DIV}|{RELOP}|{ASSIGNOP} {
     TOKENINIT;
-    yylval.name = "OP";
+    yylval->name = "OP";
     REJECT;
 }
 {AND} {return AND;}
@@ -91,16 +95,16 @@ DOT "."
 {ASSIGNOP} {return ASSIGNOP;}
 
 
-{LP} {TOKENINIT; yylval.name = "LP"; return LP;}
-{RP} {TOKENINIT; yylval.name = "RP"; return RP;}
-{LB} {TOKENINIT; yylval.name = "LB"; return LB;}
-{RB} {TOKENINIT; yylval.name = "RB"; return RB;}
-{LC} {TOKENINIT; yylval.name = "LC"; return LC;}
-{RC} {TOKENINIT; yylval.name = "RC"; return RC;} 
+{LP} {TOKENINIT; yylval->name = "LP"; return LP;}
+{RP} {TOKENINIT; yylval->name = "RP"; return RP;}
+{LB} {TOKENINIT; yylval->name = "LB"; return LB;}
+{RB} {TOKENINIT; yylval->name = "RB"; return RB;}
+{LC} {TOKENINIT; yylval->name = "LC"; return LC;}
+{RC} {TOKENINIT; yylval->name = "RC"; return RC;} 
 
-{SEMI} {TOKENINIT; yylval.name = "SEMI"; return SEMI;}
-{COMMA} {TOKENINIT; yylval.name = "COMMA"; return COMMA;}
-{DOT} {TOKENINIT; yylval.name = "DOT"; return DOT;}
+{SEMI} {TOKENINIT; yylval->name = "SEMI"; return SEMI;}
+{COMMA} {TOKENINIT; yylval->name = "COMMA"; return COMMA;}
+{DOT} {TOKENINIT; yylval->name = "DOT"; return DOT;}
 
 " "
 \n

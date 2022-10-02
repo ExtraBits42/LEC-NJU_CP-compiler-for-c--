@@ -1,5 +1,7 @@
 #pragma once
 #include<stdarg.h>
+#include<stdlib.h>
+#include<stdio.h>
 
 typedef struct TreeNode{
     enum {LEXICAL, SYNTAX}ntype;
@@ -15,4 +17,5 @@ typedef struct TreeNode{
 
 void add_child(Node* root, Node* p);
 void add_children(int num, ...);
-void set_node(Node* root, char* n);
+Node* set_node(char* n);
+void print_tree(Node* root, int blank_num);

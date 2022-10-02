@@ -1,5 +1,3 @@
 int main(){
-    int guigui = 0;
-    int j = guigui + 1;
     return 0;
 }
