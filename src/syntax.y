@@ -1,8 +1,10 @@
 %{
     #include<stdio.h>
     #include "lex.yy.c"
+    #include "sat_gen.h"
     extern int pass;
     extern int yyerror(char* msg);
+    #define YYSTYPE Node
 %}
 
 /*declared tokens*/

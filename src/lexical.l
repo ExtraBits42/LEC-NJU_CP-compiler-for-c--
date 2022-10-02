@@ -1,7 +1,12 @@
 %{
+    #include "sat_gen.h"
+    #define YYSTYPE Node
     #include "syntax.tab.h"
     #include<stdio.h>
     extern int pass;
+
+    #define TOKENINIT yylval.ntype = LEXICAL; \
+                     yylval.u.lex_val = yytext;
 %}
 %option yylineno
 
@@ -48,21 +53,30 @@ COMMA ","
 DOT "."
 %%
 
-{INT10} {return INT;}
-{INT8}|{INT16} {return INT;}
 
-{FLOAT} {return FLOAT;}
-{FLOATE} {return FLOAT;}
+{INT10}|{INT8}|{INT16} {TOKENINIT; yylval.name = "INT"; return INT;}
 
-{TYPE} {return TYPE;}
+{FLOAT}|{FLOATE} {TOKENINIT; yylval.name = "FLOAT"; return FLOAT;}
+
+{TYPE} {TOKENINIT; yylval.name = "TYPE"; return TYPE;}
+{STRUCT}|{RETURN}|{IF}|{ELSE}|{WHILE} {
+    TOKENINIT;
+    yylval.name = "KEY_WORD";
+    REJECT;
+}
 {STRUCT} {return STRUCT;}
 {RETURN} {return RETURN;}
 {IF} {return IF;}
 {ELSE} {return ELSE;}
 {WHILE} {return WHILE;}
 
-{ID} {return ID;}
+{ID} {TOKENINIT; yylval.name = "ID"; return ID;}
 
+{AND}|{OR}|{NOT}|{PLUS}|{MINUS}|{STAR}|{DIV}|{RELOP}|{ASSIGNOP} {
+    TOKENINIT;
+    yylval.name = "OP";
+    REJECT;
+}
 {AND} {return AND;}
 {OR} {return OR;}
 {NOT} {return NOT;}
@@ -76,16 +90,17 @@ DOT "."
 
 {ASSIGNOP} {return ASSIGNOP;}
 
-{LP} {return LP;}
-{RP} {return RP;}
-{LB} {return LB;}
-{RB} {return RB;}
-{LC} {return LC;}
-{RC} {return RC;} 
 
-{SEMI} {return SEMI;}
-{COMMA} {return COMMA;}
-{DOT} {return DOT;}
+{LP} {TOKENINIT; yylval.name = "LP"; return LP;}
+{RP} {TOKENINIT; yylval.name = "RP"; return RP;}
+{LB} {TOKENINIT; yylval.name = "LB"; return LB;}
+{RB} {TOKENINIT; yylval.name = "RB"; return RB;}
+{LC} {TOKENINIT; yylval.name = "LC"; return LC;}
+{RC} {TOKENINIT; yylval.name = "RC"; return RC;} 
+
+{SEMI} {TOKENINIT; yylval.name = "SEMI"; return SEMI;}
+{COMMA} {TOKENINIT; yylval.name = "COMMA"; return COMMA;}
+{DOT} {TOKENINIT; yylval.name = "DOT"; return DOT;}
 
 " "
 \n

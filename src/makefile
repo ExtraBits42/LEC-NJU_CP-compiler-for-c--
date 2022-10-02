@@ -1,21 +1,18 @@
 # One step: GNU-Flex generate lexical Analysis
 flex: lexical.l
 	flex lexical.l
-# multisteps:get lexical scanner
-flex-t: main.c lexical.l test.cmm
-	flex lexical.l
-	gcc main.c lex.yy.c -lfl -o scanner
-	./scanner test.cmm
 
 bison-d: lexical.l syntax.y
-	flex lexical.l
 	bison -d syntax.y
+
+exec: main.c syntax.tab.c
+	gcc main.c syntax.tab.c -lfl -ly -o parser
 
 all: main.c lexical.l syntax.y
 	make clean
 	make bison-d
 	make flex
-	gcc main.c syntax.tab.c -lfl -ly -o parser
+	gcc main.c syntax.tab.c sat_gen.c -lfl -ly -o parser
 
 test: parser test.cmm
 	./parser ./test.cmm

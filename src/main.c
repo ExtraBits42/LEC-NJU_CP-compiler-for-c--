@@ -1,5 +1,6 @@
-# include<stdio.h>
-# include<stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include"sat_gen.h"
 
 /*declarations*/
 extern int yyleng;
