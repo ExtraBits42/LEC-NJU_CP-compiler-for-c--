@@ -82,7 +82,7 @@ Stmt : Exp SEMI                                 {$$ = build_syntax_node("Stmt", 
     | CompSt                                    {$$ = build_syntax_node("Stmt", @$); add_children(2, $$, $1);}
     | RETURN Exp SEMI                           {$$ = build_syntax_node("Stmt", @$); add_children(4, $$, $1, $2, $3);}
     | IF LP Exp RP Stmt %prec LOWER_THAN_ELSE   {$$ = build_syntax_node("Stmt", @$); add_children(6, $$, $1, $2, $3, $4, $5);}
-    | IF LP Exp RP Stmt ELSE Stmt               {$$ = build_syntax_node("Stmt", @$); add_children(6, $$, $1, $2, $3, $4, $5, $6, $7);}
+    | IF LP Exp RP Stmt ELSE Stmt               {$$ = build_syntax_node("Stmt", @$); add_children(8, $$, $1, $2, $3, $4, $5, $6, $7);}
     | WHILE LP Exp RP Stmt                      {$$ = build_syntax_node("Stmt", @$); add_children(6, $$, $1, $2, $3, $4, $5);}
     | error SEMI
     ;
