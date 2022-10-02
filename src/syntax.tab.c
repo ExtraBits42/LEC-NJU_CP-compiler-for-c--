@@ -1437,349 +1437,349 @@ yyreduce:
     {
   case 2:
 #line 36 "syntax.y"
-                                                {yyval = set_node("Program"); add_children(2, yyval, yyvsp[0]); root = yyval;}
+                                                {yyval = build_syntax_node("Program"); add_children(2, yyval, yyvsp[0]); root = yyval;}
 #line 1442 "syntax.tab.c"
     break;
 
   case 3:
 #line 38 "syntax.y"
-                                                {yyval = set_node("ExtDefList"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("ExtDefList"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
 #line 1448 "syntax.tab.c"
     break;
 
   case 4:
 #line 39 "syntax.y"
-                                                {yyval = set_node("ExtDefList");}
+                                                {yyval = build_syntax_node("ExtDefList");}
 #line 1454 "syntax.tab.c"
     break;
 
   case 5:
 #line 41 "syntax.y"
-                                                {yyval = set_node("ExtDef"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("ExtDef"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1460 "syntax.tab.c"
     break;
 
   case 6:
 #line 42 "syntax.y"
-                                                {yyval = set_node("ExtDef"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("ExtDef"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
 #line 1466 "syntax.tab.c"
     break;
 
   case 7:
 #line 43 "syntax.y"
-                                                {yyval = set_node("ExtDef"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("ExtDef"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1472 "syntax.tab.c"
     break;
 
   case 9:
 #line 46 "syntax.y"
-                                                {yyval = set_node("ExtDecList"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("ExtDecList"); add_children(2, yyval, yyvsp[0]);}
 #line 1478 "syntax.tab.c"
     break;
 
   case 10:
 #line 47 "syntax.y"
-                                                {yyval = set_node("ExtDecList"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("ExtDecList"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1484 "syntax.tab.c"
     break;
 
   case 11:
 #line 50 "syntax.y"
-                                                {yyval = set_node("Specifier"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("Specifier"); add_children(2, yyval, yyvsp[0]);}
 #line 1490 "syntax.tab.c"
     break;
 
   case 12:
 #line 51 "syntax.y"
-                                                {yyval = set_node("Specifier"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("Specifier"); add_children(2, yyval, yyvsp[0]);}
 #line 1496 "syntax.tab.c"
     break;
 
   case 13:
 #line 53 "syntax.y"
-                                                {yyval = set_node("StructSpecifier"); add_children(6, yyval, yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("StructSpecifier"); add_children(6, yyval, yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1502 "syntax.tab.c"
     break;
 
   case 14:
 #line 54 "syntax.y"
-                                                {yyval = set_node("StructSpecifier"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("StructSpecifier"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
 #line 1508 "syntax.tab.c"
     break;
 
   case 15:
 #line 56 "syntax.y"
-                                                {yyval = set_node("OptTag"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("OptTag"); add_children(2, yyval, yyvsp[0]);}
 #line 1514 "syntax.tab.c"
     break;
 
   case 16:
 #line 57 "syntax.y"
-                                                {yyval = set_node("OptTag");}
+                                                {yyval = build_syntax_node("OptTag");}
 #line 1520 "syntax.tab.c"
     break;
 
   case 17:
 #line 59 "syntax.y"
-                                                {yyval = set_node("Tag"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("Tag"); add_children(2, yyval, yyvsp[0]);}
 #line 1526 "syntax.tab.c"
     break;
 
   case 18:
 #line 62 "syntax.y"
-                                                {yyval = set_node("VarDec"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("VarDec"); add_children(2, yyval, yyvsp[0]);}
 #line 1532 "syntax.tab.c"
     break;
 
   case 19:
 #line 63 "syntax.y"
-                                                {yyval = set_node("VarDec"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("VarDec"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1538 "syntax.tab.c"
     break;
 
   case 20:
 #line 65 "syntax.y"
-                                                {yyval = set_node("FunDec"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("FunDec"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1544 "syntax.tab.c"
     break;
 
   case 21:
 #line 66 "syntax.y"
-                                                {yyval = set_node("FunDec"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("FunDec"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1550 "syntax.tab.c"
     break;
 
   case 22:
 #line 68 "syntax.y"
-                                                {yyval = set_node("VarList"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("VarList"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1556 "syntax.tab.c"
     break;
 
   case 23:
 #line 69 "syntax.y"
-                                                {yyval = set_node("VarList"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("VarList"); add_children(2, yyval, yyvsp[0]);}
 #line 1562 "syntax.tab.c"
     break;
 
   case 24:
 #line 71 "syntax.y"
-                                                {yyval = set_node("ParamDec"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("ParamDec"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
 #line 1568 "syntax.tab.c"
     break;
 
   case 25:
 #line 74 "syntax.y"
-                                                {yyval = set_node("CompSt"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("CompSt"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1574 "syntax.tab.c"
     break;
 
   case 26:
 #line 76 "syntax.y"
-                                                {yyval = set_node("StmtList"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("StmtList"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
 #line 1580 "syntax.tab.c"
     break;
 
   case 27:
 #line 77 "syntax.y"
-                                                {yyval = set_node("StmtList");}
+                                                {yyval = build_syntax_node("StmtList");}
 #line 1586 "syntax.tab.c"
     break;
 
   case 28:
 #line 79 "syntax.y"
-                                                {yyval = set_node("Stmt"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Stmt"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
 #line 1592 "syntax.tab.c"
     break;
 
   case 29:
 #line 80 "syntax.y"
-                                                {yyval = set_node("Stmt"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("Stmt"); add_children(2, yyval, yyvsp[0]);}
 #line 1598 "syntax.tab.c"
     break;
 
   case 30:
 #line 81 "syntax.y"
-                                                {yyval = set_node("Stmt"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Stmt"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1604 "syntax.tab.c"
     break;
 
   case 31:
 #line 82 "syntax.y"
-                                                {yyval = set_node("Stmt"); add_children(6, yyval, yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Stmt"); add_children(6, yyval, yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1610 "syntax.tab.c"
     break;
 
   case 32:
 #line 83 "syntax.y"
-                                                {yyval = set_node("Stmt"); add_children(6, yyval, yyvsp[-6], yyvsp[-5], yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Stmt"); add_children(6, yyval, yyvsp[-6], yyvsp[-5], yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1616 "syntax.tab.c"
     break;
 
   case 33:
 #line 84 "syntax.y"
-                                                {yyval = set_node("Stmt"); add_children(6, yyval, yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Stmt"); add_children(6, yyval, yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1622 "syntax.tab.c"
     break;
 
   case 35:
 #line 88 "syntax.y"
-                                                {yyval = set_node("DefList"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("DefList"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
 #line 1628 "syntax.tab.c"
     break;
 
   case 36:
 #line 89 "syntax.y"
-                                                {yyval = set_node("DefList");}
+                                                {yyval = build_syntax_node("DefList");}
 #line 1634 "syntax.tab.c"
     break;
 
   case 37:
 #line 91 "syntax.y"
-                                                {yyval = set_node("Def"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Def"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1640 "syntax.tab.c"
     break;
 
   case 38:
 #line 93 "syntax.y"
-                                                {yyval = set_node("DecList"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("DecList"); add_children(2, yyval, yyvsp[0]);}
 #line 1646 "syntax.tab.c"
     break;
 
   case 39:
 #line 94 "syntax.y"
-                                                {yyval = set_node("DecList"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("DecList"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1652 "syntax.tab.c"
     break;
 
   case 40:
 #line 96 "syntax.y"
-                                                {yyval = set_node("Dec"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("Dec"); add_children(2, yyval, yyvsp[0]);}
 #line 1658 "syntax.tab.c"
     break;
 
   case 41:
 #line 97 "syntax.y"
-                                                {yyval = set_node("Dec"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Dec"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1664 "syntax.tab.c"
     break;
 
   case 42:
 #line 100 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1670 "syntax.tab.c"
     break;
 
   case 43:
 #line 101 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1676 "syntax.tab.c"
     break;
 
   case 44:
 #line 102 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1682 "syntax.tab.c"
     break;
 
   case 45:
 #line 103 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1688 "syntax.tab.c"
     break;
 
   case 46:
 #line 104 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1694 "syntax.tab.c"
     break;
 
   case 47:
 #line 105 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1700 "syntax.tab.c"
     break;
 
   case 48:
 #line 106 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1706 "syntax.tab.c"
     break;
 
   case 49:
 #line 107 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1712 "syntax.tab.c"
     break;
 
   case 50:
 #line 108 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1718 "syntax.tab.c"
     break;
 
   case 51:
 #line 109 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
 #line 1724 "syntax.tab.c"
     break;
 
   case 52:
 #line 110 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
 #line 1730 "syntax.tab.c"
     break;
 
   case 53:
 #line 111 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1736 "syntax.tab.c"
     break;
 
   case 54:
 #line 112 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1742 "syntax.tab.c"
     break;
 
   case 55:
 #line 113 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1748 "syntax.tab.c"
     break;
 
   case 56:
 #line 114 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1754 "syntax.tab.c"
     break;
 
   case 57:
 #line 115 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(2, yyval, yyvsp[0]);}
 #line 1760 "syntax.tab.c"
     break;
 
   case 58:
 #line 116 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(2, yyval, yyvsp[0]);}
 #line 1766 "syntax.tab.c"
     break;
 
   case 59:
 #line 117 "syntax.y"
-                                                {yyval = set_node("Exp"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("Exp"); add_children(2, yyval, yyvsp[0]);}
 #line 1772 "syntax.tab.c"
     break;
 
   case 60:
 #line 119 "syntax.y"
-                                                {yyval = set_node("Args"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+                                                {yyval = build_syntax_node("Args"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
 #line 1778 "syntax.tab.c"
     break;
 
   case 61:
 #line 120 "syntax.y"
-                                                {yyval = set_node("Args"); add_children(2, yyval, yyvsp[0]);}
+                                                {yyval = build_syntax_node("Args"); add_children(2, yyval, yyvsp[0]);}
 #line 1784 "syntax.tab.c"
     break;
 

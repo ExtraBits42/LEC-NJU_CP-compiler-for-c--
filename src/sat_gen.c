@@ -1,12 +1,11 @@
 #include"sat_gen.h"
 
-
-
 extern int yylineno;
 
 inline void add_child(Node* root, Node* p){
-    if(root->child == NULL){
-        root->child = p;
+    /*对节点root添加子结点p*/
+    if(root->children == NULL){
+        root->children = p;
         root->tail = p;
     }
     else{
@@ -16,6 +15,7 @@ inline void add_child(Node* root, Node* p){
 }
 
 void add_children(int num, ...){
+    /*用于Bison：将产生式右侧所有节点作为孩子追加到产生式左侧节点*/
     va_list valist;
     va_start(valist, num);
     Node* root;
@@ -29,29 +29,47 @@ void add_children(int num, ...){
     va_end(valist);
 }
 
-Node* set_node(char* n){
+Node* build_lexical_node(char* n, char* v){
+    /*初始化终结符号节点*/
+    Node* root = (Node *)malloc(sizeof(Node));
+    root->ntype = LEXICAL;
+    root->name = (char *)malloc(sizeof(n));
+    strcpy(root->name, n);
+    root->u.lex_val = (char *)malloc(sizeof(v));
+    strcpy(root->u.lex_val, v);
+    root->children = NULL;
+    root->tail = NULL;
+    root->next = NULL;
+    return root;
+}
+
+Node* build_syntax_node(char* n){
+    /*初始化非终结符号节点*/
     Node* root = (Node *)malloc(sizeof(Node));
     root->ntype = SYNTAX;
     root->name = n;
     root->u.syn_line = yylineno;
-    root->child = NULL;
+    root->children = NULL;
     root->tail = NULL;
     root->next = NULL;
     return root;
 }
 
 void print_tree(Node* root, int blank_num){
-    for(int i = 0; i < blank_num; i++) printf(" ");
     if(root->ntype == LEXICAL){
-        if(root->name == "ID") printf("ID: %s\n", root->u.lex_val);
-        else if(root->name == "TYPE") printf("TYPE: %s\n", root->u.lex_val);
-        else if(root->name == "INT") printf("INT: %s\n", root->u.lex_val);
-        else if(root->name == "FLOAT") printf("FLOAT: %s\n", root->u.lex_val);
+        for(int i = 0; i < blank_num; i++) printf(" ");
+        if(strcmp(root->name, "ID") == 0) printf("ID: %s\n", root->u.lex_val);
+        else if(strcmp(root->name, "TYPE") == 0) printf("TYPE: %s\n", root->u.lex_val);
+        else if(strcmp(root->name, "INT") == 0) printf("INT: %d\n", atoi(root->u.lex_val));
+        else if(strcmp(root->name, "FLOAT") == 0) printf("FLOAT: %f\n", atof(root->u.lex_val));
         else printf("%s\n", root->name);
     }
     else if(root->ntype == SYNTAX){
-        printf("%s (%d)\n", root->name, root->u.syn_line);
-        Node* cursor = root->child;
+        if(root->children != NULL){
+            for(int i = 0; i < blank_num; i++) printf(" ");
+            printf("%s (%d)\n", root->name, root->u.syn_line);
+        }
+        Node* cursor = root->children;
         while(cursor != NULL){
             print_tree(cursor, blank_num+2);
             cursor = cursor->next;

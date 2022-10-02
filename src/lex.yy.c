@@ -370,8 +370,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 33
-#define YY_END_OF_BUFFER 34
+#define YY_NUM_RULES 31
+#define YY_END_OF_BUFFER 32
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -379,36 +379,16 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_acclist[148] =
+static const flex_int16_t yy_accept[78] =
     {   0,
-       34,   32,   33,   31,   33,   30,   32,   33,   11,   14,
-       32,   33,   32,   33,   21,   32,   33,   22,   32,   33,
-       11,   17,   32,   33,   11,   15,   32,   33,   28,   32,
-       33,   11,   16,   32,   33,   29,   32,   33,   11,   18,
-       32,   33,    1,   32,   33,    1,   32,   33,   27,   32,
-       33,   11,   19,   32,   33,   11,   20,   32,   33,   11,
-       19,   32,   33,   10,   32,   33,   23,   32,   33,   24,
-       32,   33,   10,   32,   33,   10,   32,   33,   10,   32,
-       33,   10,   32,   33,   10,   32,   33,   10,   32,   33,
-       25,   32,   33,   32,   33,   26,   32,   33,   11,   19,
-
-       11,   12,    1,   10,   10,   10,    4,    7,   10,   10,
-       10,   10,   10,   11,   13,    2,    1,    1,   10,   10,
-        3,   10,   10,   10,   10,    2,    2,    2,    4,    8,
-       10,   10,   10,   10,   10,    2,   10,   10,    4,    9,
-       10,    4,    6,   10,    4,    5,   10
-    } ;
-
-static const flex_int16_t yy_accept[79] =
-    {   0,
-        1,    1,    1,    2,    4,    6,    9,   13,   15,   18,
-       21,   25,   29,   32,   36,   39,   43,   46,   49,   52,
-       56,   60,   64,   67,   70,   73,   76,   79,   82,   85,
-       88,   91,   94,   96,   99,  101,  103,  103,  103,  103,
-      103,  104,  105,  106,  107,  110,  111,  112,  113,  114,
-      116,  116,  117,  118,  119,  119,  120,  121,  123,  124,
-      125,  126,  126,  127,  128,  129,  132,  133,  134,  135,
-      136,  137,  138,  139,  142,  145,  148,  148
+        0,    0,   32,   30,   29,   28,   12,   30,   19,   20,
+       15,   13,   26,   14,   27,   16,    1,    1,   25,   17,
+       18,   17,    9,   21,   22,    9,    9,    9,    9,    9,
+        9,   23,   30,   24,   17,   10,    0,    0,    0,    0,
+        1,    9,    9,    9,    6,    9,    9,    9,    9,   11,
+        0,    2,    1,    1,    0,    9,    9,    3,    9,    9,
+        9,    0,    2,    2,    2,    7,    9,    9,    9,    9,
+        2,    9,    9,    8,    5,    4,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -525,25 +505,21 @@ static const flex_int16_t yy_chk[183] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static const flex_int32_t yy_rule_can_match_eol[34] =
+static const flex_int32_t yy_rule_can_match_eol[32] =
     {   0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,     };
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,     };
+
+static yy_state_type yy_last_accepting_state;
+static char *yy_last_accepting_cpos;
 
 extern int yy_flex_debug;
 int yy_flex_debug = 0;
 
-static yy_state_type *yy_state_buf=0, *yy_state_ptr=0;
-static char *yy_full_match;
-static int yy_lp;
-#define REJECT \
-{ \
-*yy_cp = (yy_hold_char); /* undo effects of setting up yytext */ \
-yy_cp = (yy_full_match); /* restore poss. backed-over text */ \
-++(yy_lp); \
-goto find_rule; \
-}
-
+/* The intent behind this definition is that it'll catch
+ * any uses of REJECT which flex missed.
+ */
+#define REJECT reject_used_but_not_detected
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
@@ -555,14 +531,8 @@ char *yytext;
     #include "syntax.tab.h"
     #include<stdio.h>
     extern int pass;
-
-    #define TOKENINIT yylval = (Node *)malloc(sizeof(Node)); \
-                      yylval->ntype = LEXICAL; \
-                      yylval->u.lex_val = yytext; \
-                      yylval->child = NULL; \
-                      yylval->tail = NULL; \
-                      yylval->next = NULL;
-#line 566 "lex.yy.c"
+    #define TOKENINIT(n) yylval = build_lexical_node(n, n);
+#line 536 "lex.yy.c"
 /*integer data*/
 /*float data*/
 /*key words*/
@@ -573,7 +543,7 @@ char *yytext;
 /*assignment operators*/
 /*parentheses*/
 /*others*/
-#line 577 "lex.yy.c"
+#line 547 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -771,12 +741,6 @@ YY_DECL
 		YY_USER_INIT;
 #endif
 
-        /* Create the reject buffer large enough to save one state per allowed character. */
-        if ( ! (yy_state_buf) )
-            (yy_state_buf) = (yy_state_type *)yyalloc(YY_STATE_BUF_SIZE  );
-            if ( ! (yy_state_buf) )
-                YY_FATAL_ERROR( "out of dynamic memory in yylex()" );
-
 		if ( ! (yy_start) )
 			(yy_start) = 1;	/* first start state */
 
@@ -796,11 +760,11 @@ YY_DECL
 		}
 
 	{
-#line 58 "lexical.l"
+#line 52 "lexical.l"
 
 
 
-#line 804 "lex.yy.c"
+#line 768 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -815,14 +779,15 @@ YY_DECL
 		yy_bp = yy_cp;
 
 		yy_current_state = (yy_start);
-
-		(yy_state_ptr) = (yy_state_buf);
-		*(yy_state_ptr)++ = yy_current_state;
-
 yy_match:
 		do
 			{
 			YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)] ;
+			if ( yy_accept[yy_current_state] )
+				{
+				(yy_last_accepting_state) = yy_current_state;
+				(yy_last_accepting_cpos) = yy_cp;
+				}
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
@@ -830,30 +795,17 @@ yy_match:
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-			*(yy_state_ptr)++ = yy_current_state;
 			++yy_cp;
 			}
 		while ( yy_base[yy_current_state] != 138 );
 
 yy_find_action:
-		yy_current_state = *--(yy_state_ptr);
-		(yy_lp) = yy_accept[yy_current_state];
-
-find_rule: /* we branch to this label when backing up */
-
-		for ( ; ; ) /* until we find what rule we matched */
-			{
-			if ( (yy_lp) && (yy_lp) < yy_accept[yy_current_state + 1] )
-				{
-				yy_act = yy_acclist[(yy_lp)];
-					{
-					(yy_full_match) = yy_cp;
-					break;
-					}
-				}
-			--yy_cp;
-			yy_current_state = *--(yy_state_ptr);
-			(yy_lp) = yy_accept[yy_current_state];
+		yy_act = yy_accept[yy_current_state];
+		if ( yy_act == 0 )
+			{ /* have to back up */
+			yy_cp = (yy_last_accepting_cpos);
+			yy_current_state = (yy_last_accepting_state);
+			yy_act = yy_accept[yy_current_state];
 			}
 
 		YY_DO_BEFORE_ACTION;
@@ -872,187 +824,176 @@ do_action:	/* This label is used only to access EOF actions. */
 
 		switch ( yy_act )
 	{ /* beginning of action switch */
+			case 0: /* must back up */
+			/* undo the effects of YY_DO_BEFORE_ACTION */
+			*yy_cp = (yy_hold_char);
+			yy_cp = (yy_last_accepting_cpos);
+			yy_current_state = (yy_last_accepting_state);
+			goto yy_find_action;
+
 case 1:
 YY_RULE_SETUP
-#line 61 "lexical.l"
-{TOKENINIT; yylval->name = "INT"; return INT;}
+#line 55 "lexical.l"
+{yylval = build_lexical_node("INT", yytext); return INT;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 63 "lexical.l"
-{TOKENINIT; yylval->name = "FLOAT"; return FLOAT;}
+#line 57 "lexical.l"
+{yylval = build_lexical_node("FLOAT", yytext); return FLOAT;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 65 "lexical.l"
-{TOKENINIT; yylval->name = "TYPE"; return TYPE;}
+#line 59 "lexical.l"
+{TOKENINIT("TYPE"); return TYPE;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 66 "lexical.l"
-{
-    TOKENINIT;
-    yylval->name = "KEY_WORD";
-    REJECT;
-}
+#line 60 "lexical.l"
+{TOKENINIT("STRUCT"); return STRUCT;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 71 "lexical.l"
-{return STRUCT;}
+#line 61 "lexical.l"
+{TOKENINIT("RETURN"); return RETURN;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 72 "lexical.l"
-{return RETURN;}
+#line 62 "lexical.l"
+{TOKENINIT("IF"); return IF;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 73 "lexical.l"
-{return IF;}
+#line 63 "lexical.l"
+{TOKENINIT("ELSE"); return ELSE;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 74 "lexical.l"
-{return ELSE;}
+#line 64 "lexical.l"
+{TOKENINIT("WHILE"); return WHILE;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 75 "lexical.l"
-{return WHILE;}
+#line 66 "lexical.l"
+{TOKENINIT("ID"); return ID;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 77 "lexical.l"
-{TOKENINIT; yylval->name = "ID"; return ID;}
+#line 68 "lexical.l"
+{TOKENINIT("AND"); return AND;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 79 "lexical.l"
-{
-    TOKENINIT;
-    yylval->name = "OP";
-    REJECT;
-}
+#line 69 "lexical.l"
+{TOKENINIT("OR"); return OR;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 84 "lexical.l"
-{return AND;}
+#line 70 "lexical.l"
+{TOKENINIT("NOT"); return NOT;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 85 "lexical.l"
-{return OR;}
+#line 72 "lexical.l"
+{TOKENINIT("PLUS"); return PLUS;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 86 "lexical.l"
-{return NOT;}
+#line 73 "lexical.l"
+{TOKENINIT("MINUS"); return MINUS;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 88 "lexical.l"
-{return PLUS;}
+#line 74 "lexical.l"
+{TOKENINIT("STAR"); return STAR;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 89 "lexical.l"
-{return MINUS;}
+#line 75 "lexical.l"
+{TOKENINIT("DIV"); return DIV;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 90 "lexical.l"
-{return STAR;}
+#line 77 "lexical.l"
+{TOKENINIT("RELOP"); return RELOP;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 91 "lexical.l"
-{return DIV;}
+#line 79 "lexical.l"
+{TOKENINIT("ASSIGNOP"); return ASSIGNOP;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 93 "lexical.l"
-{return RELOP;}
+#line 82 "lexical.l"
+{TOKENINIT("LP"); return LP;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 95 "lexical.l"
-{return ASSIGNOP;}
+#line 83 "lexical.l"
+{TOKENINIT("RP"); return RP;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 98 "lexical.l"
-{TOKENINIT; yylval->name = "LP"; return LP;}
+#line 84 "lexical.l"
+{TOKENINIT("LB"); return LB;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 99 "lexical.l"
-{TOKENINIT; yylval->name = "RP"; return RP;}
+#line 85 "lexical.l"
+{TOKENINIT("RB"); return RB;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 100 "lexical.l"
-{TOKENINIT; yylval->name = "LB"; return LB;}
+#line 86 "lexical.l"
+{TOKENINIT("LC"); return LC;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 101 "lexical.l"
-{TOKENINIT; yylval->name = "RB"; return RB;}
+#line 87 "lexical.l"
+{TOKENINIT("RC"); return RC;} 
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 102 "lexical.l"
-{TOKENINIT; yylval->name = "LC"; return LC;}
+#line 89 "lexical.l"
+{TOKENINIT("SEMI"); return SEMI;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 103 "lexical.l"
-{TOKENINIT; yylval->name = "RC"; return RC;} 
+#line 90 "lexical.l"
+{TOKENINIT("COMMA"); return COMMA;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 105 "lexical.l"
-{TOKENINIT; yylval->name = "SEMI"; return SEMI;}
+#line 91 "lexical.l"
+{TOKENINIT("DOT"); return DOT;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 106 "lexical.l"
-{TOKENINIT; yylval->name = "COMMA"; return COMMA;}
+#line 93 "lexical.l"
+
 	YY_BREAK
 case 29:
+/* rule 29 can match eol */
 YY_RULE_SETUP
-#line 107 "lexical.l"
-{TOKENINIT; yylval->name = "DOT"; return DOT;}
+#line 94 "lexical.l"
+
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 109 "lexical.l"
-
-	YY_BREAK
-case 31:
-/* rule 31 can match eol */
-YY_RULE_SETUP
-#line 110 "lexical.l"
-
-	YY_BREAK
-case 32:
-YY_RULE_SETUP
-#line 112 "lexical.l"
+#line 96 "lexical.l"
 {
     /*Type A: fault report*/
     pass = 0;
     printf("Error type A at Line %d: Mysterious characters \'%s\'\n", yylineno, yytext);
 }
 	YY_BREAK
-case 33:
+case 31:
 YY_RULE_SETUP
-#line 117 "lexical.l"
+#line 101 "lexical.l"
 ECHO;
 	YY_BREAK
-#line 1054 "lex.yy.c"
-			case YY_STATE_EOF(INITIAL):
-				yyterminate();
+#line 995 "lex.yy.c"
+case YY_STATE_EOF(INITIAL):
+	yyterminate();
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1243,8 +1184,38 @@ static int yy_get_next_buffer (void)
 		while ( num_to_read <= 0 )
 			{ /* Not enough room in the buffer - grow it. */
 
-			YY_FATAL_ERROR(
-"input buffer overflow, can't enlarge buffer because scanner uses REJECT" );
+			/* just a shorter name for the current buffer */
+			YY_BUFFER_STATE b = YY_CURRENT_BUFFER_LVALUE;
+
+			int yy_c_buf_p_offset =
+				(int) ((yy_c_buf_p) - b->yy_ch_buf);
+
+			if ( b->yy_is_our_buffer )
+				{
+				int new_size = b->yy_buf_size * 2;
+
+				if ( new_size <= 0 )
+					b->yy_buf_size += b->yy_buf_size / 8;
+				else
+					b->yy_buf_size *= 2;
+
+				b->yy_ch_buf = (char *)
+					/* Include room in for 2 EOB chars. */
+					yyrealloc( (void *) b->yy_ch_buf,
+							 (yy_size_t) (b->yy_buf_size + 2)  );
+				}
+			else
+				/* Can't grow it, we don't own it. */
+				b->yy_ch_buf = NULL;
+
+			if ( ! b->yy_ch_buf )
+				YY_FATAL_ERROR(
+				"fatal error - scanner input buffer overflow" );
+
+			(yy_c_buf_p) = &b->yy_ch_buf[yy_c_buf_p_offset];
+
+			num_to_read = YY_CURRENT_BUFFER_LVALUE->yy_buf_size -
+						number_to_move - 1;
 
 			}
 
@@ -1306,12 +1277,14 @@ static int yy_get_next_buffer (void)
     
 	yy_current_state = (yy_start);
 
-	(yy_state_ptr) = (yy_state_buf);
-	*(yy_state_ptr)++ = yy_current_state;
-
 	for ( yy_cp = (yytext_ptr) + YY_MORE_ADJ; yy_cp < (yy_c_buf_p); ++yy_cp )
 		{
 		YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
+		if ( yy_accept[yy_current_state] )
+			{
+			(yy_last_accepting_state) = yy_current_state;
+			(yy_last_accepting_cpos) = yy_cp;
+			}
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
@@ -1319,7 +1292,6 @@ static int yy_get_next_buffer (void)
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-		*(yy_state_ptr)++ = yy_current_state;
 		}
 
 	return yy_current_state;
@@ -1333,8 +1305,14 @@ static int yy_get_next_buffer (void)
     static yy_state_type yy_try_NUL_trans  (yy_state_type yy_current_state )
 {
 	int yy_is_jam;
-    
+    	char *yy_cp = (yy_c_buf_p);
+
 	YY_CHAR yy_c = 1;
+	if ( yy_accept[yy_current_state] )
+		{
+		(yy_last_accepting_state) = yy_current_state;
+		(yy_last_accepting_cpos) = yy_cp;
+		}
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
@@ -1343,8 +1321,6 @@ static int yy_get_next_buffer (void)
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 	yy_is_jam = (yy_current_state == 77);
-	if ( ! yy_is_jam )
-		*(yy_state_ptr)++ = yy_current_state;
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1945,11 +1921,6 @@ static int yy_init_globals (void)
     (yy_init) = 0;
     (yy_start) = 0;
 
-    (yy_state_buf) = 0;
-    (yy_state_ptr) = 0;
-    (yy_full_match) = 0;
-    (yy_lp) = 0;
-
 /* Defined in main.c */
 #ifdef YY_STDINIT
     yyin = stdin;
@@ -1979,9 +1950,6 @@ int yylex_destroy  (void)
 	/* Destroy the stack itself. */
 	yyfree((yy_buffer_stack) );
 	(yy_buffer_stack) = NULL;
-
-    yyfree ( (yy_state_buf) );
-    (yy_state_buf)  = NULL;
 
     /* Reset the globals. This is important in a non-reentrant scanner so the next time
      * yylex() is called, initialization will occur. */
@@ -2040,6 +2008,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 117 "lexical.l"
+#line 101 "lexical.l"
 
 

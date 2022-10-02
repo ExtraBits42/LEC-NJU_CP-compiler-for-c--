@@ -4,13 +4,8 @@
     #include "syntax.tab.h"
     #include<stdio.h>
     extern int pass;
+    #define TOKENINIT(n) yylval = build_lexical_node(n, n);
 
-    #define TOKENINIT yylval = (Node *)malloc(sizeof(Node)); \
-                      yylval->ntype = LEXICAL; \
-                      yylval->u.lex_val = yytext; \
-                      yylval->child = NULL; \
-                      yylval->tail = NULL; \
-                      yylval->next = NULL;
 %}
 %option yylineno
 
@@ -58,53 +53,43 @@ DOT "."
 %%
 
 
-{INT10}|{INT8}|{INT16} {TOKENINIT; yylval->name = "INT"; return INT;}
+{INT10}|{INT8}|{INT16} {yylval = build_lexical_node("INT", yytext); return INT;}
 
-{FLOAT}|{FLOATE} {TOKENINIT; yylval->name = "FLOAT"; return FLOAT;}
+{FLOAT}|{FLOATE} {yylval = build_lexical_node("FLOAT", yytext); return FLOAT;}
 
-{TYPE} {TOKENINIT; yylval->name = "TYPE"; return TYPE;}
-{STRUCT}|{RETURN}|{IF}|{ELSE}|{WHILE} {
-    TOKENINIT;
-    yylval->name = "KEY_WORD";
-    REJECT;
-}
-{STRUCT} {return STRUCT;}
-{RETURN} {return RETURN;}
-{IF} {return IF;}
-{ELSE} {return ELSE;}
-{WHILE} {return WHILE;}
+{TYPE} {TOKENINIT("TYPE"); return TYPE;}
+{STRUCT} {TOKENINIT("STRUCT"); return STRUCT;}
+{RETURN} {TOKENINIT("RETURN"); return RETURN;}
+{IF} {TOKENINIT("IF"); return IF;}
+{ELSE} {TOKENINIT("ELSE"); return ELSE;}
+{WHILE} {TOKENINIT("WHILE"); return WHILE;}
 
-{ID} {TOKENINIT; yylval->name = "ID"; return ID;}
+{ID} {TOKENINIT("ID"); return ID;}
 
-{AND}|{OR}|{NOT}|{PLUS}|{MINUS}|{STAR}|{DIV}|{RELOP}|{ASSIGNOP} {
-    TOKENINIT;
-    yylval->name = "OP";
-    REJECT;
-}
-{AND} {return AND;}
-{OR} {return OR;}
-{NOT} {return NOT;}
+{AND} {TOKENINIT("AND"); return AND;}
+{OR} {TOKENINIT("OR"); return OR;}
+{NOT} {TOKENINIT("NOT"); return NOT;}
 
-{PLUS} {return PLUS;}
-{MINUS} {return MINUS;}
-{STAR} {return STAR;}
-{DIV} {return DIV;}
+{PLUS} {TOKENINIT("PLUS"); return PLUS;}
+{MINUS} {TOKENINIT("MINUS"); return MINUS;}
+{STAR} {TOKENINIT("STAR"); return STAR;}
+{DIV} {TOKENINIT("DIV"); return DIV;}
 
-{RELOP} {return RELOP;}
+{RELOP} {TOKENINIT("RELOP"); return RELOP;}
 
-{ASSIGNOP} {return ASSIGNOP;}
+{ASSIGNOP} {TOKENINIT("ASSIGNOP"); return ASSIGNOP;}
 
 
-{LP} {TOKENINIT; yylval->name = "LP"; return LP;}
-{RP} {TOKENINIT; yylval->name = "RP"; return RP;}
-{LB} {TOKENINIT; yylval->name = "LB"; return LB;}
-{RB} {TOKENINIT; yylval->name = "RB"; return RB;}
-{LC} {TOKENINIT; yylval->name = "LC"; return LC;}
-{RC} {TOKENINIT; yylval->name = "RC"; return RC;} 
+{LP} {TOKENINIT("LP"); return LP;}
+{RP} {TOKENINIT("RP"); return RP;}
+{LB} {TOKENINIT("LB"); return LB;}
+{RB} {TOKENINIT("RB"); return RB;}
+{LC} {TOKENINIT("LC"); return LC;}
+{RC} {TOKENINIT("RC"); return RC;} 
 
-{SEMI} {TOKENINIT; yylval->name = "SEMI"; return SEMI;}
-{COMMA} {TOKENINIT; yylval->name = "COMMA"; return COMMA;}
-{DOT} {TOKENINIT; yylval->name = "DOT"; return DOT;}
+{SEMI} {TOKENINIT("SEMI"); return SEMI;}
+{COMMA} {TOKENINIT("COMMA"); return COMMA;}
+{DOT} {TOKENINIT("DOT"); return DOT;}
 
 " "
 \n
