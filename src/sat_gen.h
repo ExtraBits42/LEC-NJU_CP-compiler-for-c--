@@ -32,3 +32,4 @@ void add_children(int num, ...);
 Node* build_lexical_node(char* n, char* v);
 Node* build_syntax_node(char* n, YYLTYPE location);
 void print_tree(Node* root, int blank_num);
+

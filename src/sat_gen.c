@@ -2,6 +2,30 @@
 
 extern int yylineno;
 
+int int_o2d(char *v){
+    /*整数：八进制转十进制*/
+    int len = strlen(v);
+    int ans = 0;
+    for(int i = 1; i < len; i++){
+        ans = (ans << 3) + (v[i] - '0');
+    }
+    return ans;
+}
+
+int int_h2d(char *v){
+    /*整数：十六进制转十进制*/
+    int len = strlen(v);
+    int ans = 0;
+    for(int i = 2; i < len; i++){
+        int tmp = 0;
+        if(v[i] >= '0' && v[i] <= '9') tmp = v[i] - '0';
+        else if(v[i] >= 'a' && v[i] <= 'f') tmp = 10 + v[i] - 'a';
+        else if(v[i] >= 'A' && v[i] <= 'F') tmp = 10 + v[i] - 'A';
+        ans = (ans << 4) + tmp;
+    }
+    return ans;
+}
+
 inline void add_child(Node* root, Node* p){
     /*对节点root添加子结点p*/
     if(root->children == NULL){
@@ -56,11 +80,14 @@ Node* build_syntax_node(char* n, YYLTYPE location){
 }
 
 void print_tree(Node* root, int blank_num){
+    /*打印语法分析树*/
     if(root->ntype == LEXICAL){
         for(int i = 0; i < blank_num; i++) printf(" ");
         if(strcmp(root->name, "ID") == 0) printf("ID: %s\n", root->u.lex_val);
         else if(strcmp(root->name, "TYPE") == 0) printf("TYPE: %s\n", root->u.lex_val);
-        else if(strcmp(root->name, "INT") == 0) printf("INT: %d\n", atoi(root->u.lex_val));
+        else if(strcmp(root->name, "INT10") == 0) printf("INT: %d\n", atoi(root->u.lex_val));
+        else if(strcmp(root->name, "INT8") == 0) printf("INT: %d\n", int_o2d(root->u.lex_val));
+        else if(strcmp(root->name, "INT16") == 0) printf("INT: %d\n", int_h2d(root->u.lex_val));
         else if(strcmp(root->name, "FLOAT") == 0) printf("FLOAT: %f\n", atof(root->u.lex_val));
         else printf("%s\n", root->name);
     }

@@ -61,7 +61,9 @@ DOT "."
 %%
 
 
-{INT10}|{INT8}|{INT16} {TOKENINIT("INT", yytext); return INT;}
+{INT10} {TOKENINIT("INT10", yytext); return INT;}
+{INT8} {TOKENINIT("INT8", yytext); return INT;}
+{INT16} {TOKENINIT("INT16", yytext); return INT;}
 
 {FLOAT}|{FLOATE} {TOKENINIT("FLOAT", yytext); return FLOAT;}
 
