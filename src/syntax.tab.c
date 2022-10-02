@@ -66,11 +66,11 @@
 
 
 /* First part of user prologue.  */
-#line 1 "syntax.y"
+#line 3 "syntax.y"
 
     #include<stdio.h>
-    #include "lex.yy.c"
     #include "sat_gen.h"
+    #include "lex.yy.c"
     extern int pass;
     extern int yyerror(char* msg);
     extern Node* root;
@@ -162,9 +162,23 @@ typedef int YYSTYPE;
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
+/* Location type.  */
+#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
+typedef struct YYLTYPE YYLTYPE;
+struct YYLTYPE
+{
+  int first_line;
+  int first_column;
+  int last_line;
+  int last_column;
+};
+# define YYLTYPE_IS_DECLARED 1
+# define YYLTYPE_IS_TRIVIAL 1
+#endif
+
 
 extern YYSTYPE yylval;
-
+extern YYLTYPE yylloc;
 int yyparse (void);
 
 #endif /* !YY_YY_SYNTAX_TAB_H_INCLUDED  */
@@ -412,13 +426,15 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-         || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+         || (defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL \
+             && defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
 {
   yy_state_t yyss_alloc;
   YYSTYPE yyvs_alloc;
+  YYLTYPE yyls_alloc;
 };
 
 /* The size of the maximum gap between one aligned stack and the next.  */
@@ -427,8 +443,9 @@ union yyalloc
 /* The size of an array large to enough to hold all stacks, each with
    N elements.  */
 # define YYSTACK_BYTES(N) \
-     ((N) * (YYSIZEOF (yy_state_t) + YYSIZEOF (YYSTYPE)) \
-      + YYSTACK_GAP_MAXIMUM)
+     ((N) * (YYSIZEOF (yy_state_t) + YYSIZEOF (YYSTYPE) \
+             + YYSIZEOF (YYLTYPE)) \
+      + 2 * YYSTACK_GAP_MAXIMUM)
 
 # define YYCOPY_NEEDED 1
 
@@ -532,13 +549,13 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    36,    36,    38,    39,    41,    42,    43,    44,    46,
-      47,    50,    51,    53,    54,    56,    57,    59,    62,    63,
-      65,    66,    68,    69,    71,    74,    76,    77,    79,    80,
-      81,    82,    83,    84,    85,    88,    89,    91,    93,    94,
-      96,    97,   100,   101,   102,   103,   104,   105,   106,   107,
-     108,   109,   110,   111,   112,   113,   114,   115,   116,   117,
-     119,   120,   121
+       0,    38,    38,    40,    41,    43,    44,    45,    46,    48,
+      49,    52,    53,    55,    56,    58,    59,    61,    64,    65,
+      67,    68,    70,    71,    73,    76,    78,    79,    81,    82,
+      83,    84,    85,    86,    87,    90,    91,    93,    95,    96,
+      98,    99,   102,   103,   104,   105,   106,   107,   108,   109,
+     110,   111,   112,   113,   114,   115,   116,   117,   118,   119,
+     121,   122,   123
 };
 #endif
 
@@ -778,6 +795,32 @@ static const yytype_int8 yyr2[] =
 #define YYERRCODE       256
 
 
+/* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
+   If N is 0, then set CURRENT to the empty location which ends
+   the previous symbol: RHS[0] (always defined).  */
+
+#ifndef YYLLOC_DEFAULT
+# define YYLLOC_DEFAULT(Current, Rhs, N)                                \
+    do                                                                  \
+      if (N)                                                            \
+        {                                                               \
+          (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;        \
+          (Current).first_column = YYRHSLOC (Rhs, 1).first_column;      \
+          (Current).last_line    = YYRHSLOC (Rhs, N).last_line;         \
+          (Current).last_column  = YYRHSLOC (Rhs, N).last_column;       \
+        }                                                               \
+      else                                                              \
+        {                                                               \
+          (Current).first_line   = (Current).last_line   =              \
+            YYRHSLOC (Rhs, 0).last_line;                                \
+          (Current).first_column = (Current).last_column =              \
+            YYRHSLOC (Rhs, 0).last_column;                              \
+        }                                                               \
+    while (0)
+#endif
+
+#define YYRHSLOC(Rhs, K) ((Rhs)[K])
+
 
 /* Enable debugging if requested.  */
 #if YYDEBUG
@@ -793,9 +836,48 @@ do {                                            \
     YYFPRINTF Args;                             \
 } while (0)
 
-/* This macro is provided for backward compatibility. */
+
+/* YY_LOCATION_PRINT -- Print the location on the stream.
+   This macro was not mandated originally: define only if we know
+   we won't break user code: when these are the locations we know.  */
+
 #ifndef YY_LOCATION_PRINT
-# define YY_LOCATION_PRINT(File, Loc) ((void) 0)
+# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+
+/* Print *YYLOCP on YYO.  Private, do not rely on its existence. */
+
+YY_ATTRIBUTE_UNUSED
+static int
+yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
+{
+  int res = 0;
+  int end_col = 0 != yylocp->last_column ? yylocp->last_column - 1 : 0;
+  if (0 <= yylocp->first_line)
+    {
+      res += YYFPRINTF (yyo, "%d", yylocp->first_line);
+      if (0 <= yylocp->first_column)
+        res += YYFPRINTF (yyo, ".%d", yylocp->first_column);
+    }
+  if (0 <= yylocp->last_line)
+    {
+      if (yylocp->first_line < yylocp->last_line)
+        {
+          res += YYFPRINTF (yyo, "-%d", yylocp->last_line);
+          if (0 <= end_col)
+            res += YYFPRINTF (yyo, ".%d", end_col);
+        }
+      else if (0 <= end_col && yylocp->first_column < end_col)
+        res += YYFPRINTF (yyo, "-%d", end_col);
+    }
+  return res;
+ }
+
+#  define YY_LOCATION_PRINT(File, Loc)          \
+  yy_location_print_ (File, &(Loc))
+
+# else
+#  define YY_LOCATION_PRINT(File, Loc) ((void) 0)
+# endif
 #endif
 
 
@@ -805,7 +887,7 @@ do {                                                                      \
     {                                                                     \
       YYFPRINTF (stderr, "%s ", Title);                                   \
       yy_symbol_print (stderr,                                            \
-                  Type, Value); \
+                  Type, Value, Location); \
       YYFPRINTF (stderr, "\n");                                           \
     }                                                                     \
 } while (0)
@@ -816,10 +898,11 @@ do {                                                                      \
 `-----------------------------------*/
 
 static void
-yy_symbol_value_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_value_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp)
 {
   FILE *yyoutput = yyo;
   YYUSE (yyoutput);
+  YYUSE (yylocationp);
   if (!yyvaluep)
     return;
 # ifdef YYPRINT
@@ -837,12 +920,14 @@ yy_symbol_value_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep)
 `---------------------------*/
 
 static void
-yy_symbol_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp)
 {
   YYFPRINTF (yyo, "%s %s (",
              yytype < YYNTOKENS ? "token" : "nterm", yytname[yytype]);
 
-  yy_symbol_value_print (yyo, yytype, yyvaluep);
+  YY_LOCATION_PRINT (yyo, *yylocationp);
+  YYFPRINTF (yyo, ": ");
+  yy_symbol_value_print (yyo, yytype, yyvaluep, yylocationp);
   YYFPRINTF (yyo, ")");
 }
 
@@ -875,7 +960,7 @@ do {                                                            \
 `------------------------------------------------*/
 
 static void
-yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, int yyrule)
+yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -889,7 +974,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, int yyrule)
       yy_symbol_print (stderr,
                        yystos[+yyssp[yyi + 1 - yynrhs]],
                        &yyvsp[(yyi + 1) - (yynrhs)]
-                                              );
+                       , &(yylsp[(yyi + 1) - (yynrhs)])                       );
       YYFPRINTF (stderr, "\n");
     }
 }
@@ -897,7 +982,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, int yyrule)
 # define YY_REDUCE_PRINT(Rule)          \
 do {                                    \
   if (yydebug)                          \
-    yy_reduce_print (yyssp, yyvsp, Rule); \
+    yy_reduce_print (yyssp, yyvsp, yylsp, Rule); \
 } while (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -1165,9 +1250,10 @@ yysyntax_error (YYPTRDIFF_T *yymsg_alloc, char **yymsg,
 `-----------------------------------------------*/
 
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp)
 {
   YYUSE (yyvaluep);
+  YYUSE (yylocationp);
   if (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
@@ -1185,6 +1271,12 @@ int yychar;
 
 /* The semantic value of the lookahead symbol.  */
 YYSTYPE yylval;
+/* Location data for the lookahead symbol.  */
+YYLTYPE yylloc
+# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+  = { 1, 1, 1, 1 }
+# endif
+;
 /* Number of syntax errors so far.  */
 int yynerrs;
 
@@ -1203,6 +1295,7 @@ yyparse (void)
     /* The stacks and their tools:
        'yyss': related to states.
        'yyvs': related to semantic values.
+       'yyls': related to locations.
 
        Refer to the stacks through separate pointers, to allow yyoverflow
        to reallocate them elsewhere.  */
@@ -1217,6 +1310,14 @@ yyparse (void)
     YYSTYPE *yyvs;
     YYSTYPE *yyvsp;
 
+    /* The location stack.  */
+    YYLTYPE yylsa[YYINITDEPTH];
+    YYLTYPE *yyls;
+    YYLTYPE *yylsp;
+
+    /* The locations where the error started and ended.  */
+    YYLTYPE yyerror_range[3];
+
     YYPTRDIFF_T yystacksize;
 
   int yyn;
@@ -1226,6 +1327,7 @@ yyparse (void)
   /* The variables used to return semantic value and location from the
      action routines.  */
   YYSTYPE yyval;
+  YYLTYPE yyloc;
 
 #if YYERROR_VERBOSE
   /* Buffer for error messages, and its allocated size.  */
@@ -1234,7 +1336,7 @@ yyparse (void)
   YYPTRDIFF_T yymsg_alloc = sizeof yymsgbuf;
 #endif
 
-#define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N))
+#define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N), yylsp -= (N))
 
   /* The number of symbols on the RHS of the reduced rule.
      Keep to zero when no symbol should be popped.  */
@@ -1242,6 +1344,7 @@ yyparse (void)
 
   yyssp = yyss = yyssa;
   yyvsp = yyvs = yyvsa;
+  yylsp = yyls = yylsa;
   yystacksize = YYINITDEPTH;
 
   YYDPRINTF ((stderr, "Starting parse\n"));
@@ -1250,6 +1353,7 @@ yyparse (void)
   yyerrstatus = 0;
   yynerrs = 0;
   yychar = YYEMPTY; /* Cause a token to be read.  */
+  yylsp[0] = yylloc;
   goto yysetstate;
 
 
@@ -1287,6 +1391,7 @@ yysetstate:
            memory.  */
         yy_state_t *yyss1 = yyss;
         YYSTYPE *yyvs1 = yyvs;
+        YYLTYPE *yyls1 = yyls;
 
         /* Each stack pointer address is followed by the size of the
            data in use in that stack, in bytes.  This used to be a
@@ -1295,9 +1400,11 @@ yysetstate:
         yyoverflow (YY_("memory exhausted"),
                     &yyss1, yysize * YYSIZEOF (*yyssp),
                     &yyvs1, yysize * YYSIZEOF (*yyvsp),
+                    &yyls1, yysize * YYSIZEOF (*yylsp),
                     &yystacksize);
         yyss = yyss1;
         yyvs = yyvs1;
+        yyls = yyls1;
       }
 # else /* defined YYSTACK_RELOCATE */
       /* Extend the stack our own way.  */
@@ -1316,6 +1423,7 @@ yysetstate:
           goto yyexhaustedlab;
         YYSTACK_RELOCATE (yyss_alloc, yyss);
         YYSTACK_RELOCATE (yyvs_alloc, yyvs);
+        YYSTACK_RELOCATE (yyls_alloc, yyls);
 # undef YYSTACK_RELOCATE
         if (yyss1 != yyssa)
           YYSTACK_FREE (yyss1);
@@ -1324,6 +1432,7 @@ yysetstate:
 
       yyssp = yyss + yysize - 1;
       yyvsp = yyvs + yysize - 1;
+      yylsp = yyls + yysize - 1;
 
       YY_IGNORE_USELESS_CAST_BEGIN
       YYDPRINTF ((stderr, "Stack size increased to %ld\n",
@@ -1398,6 +1507,7 @@ yybackup:
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   *++yyvsp = yylval;
   YY_IGNORE_MAYBE_UNINITIALIZED_END
+  *++yylsp = yylloc;
 
   /* Discard the shifted token.  */
   yychar = YYEMPTY;
@@ -1431,360 +1541,362 @@ yyreduce:
      GCC warning that YYVAL may be used uninitialized.  */
   yyval = yyvsp[1-yylen];
 
-
+  /* Default location. */
+  YYLLOC_DEFAULT (yyloc, (yylsp - yylen), yylen);
+  yyerror_range[1] = yyloc;
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
   case 2:
-#line 36 "syntax.y"
-                                                {yyval = build_syntax_node("Program"); add_children(2, yyval, yyvsp[0]); root = yyval;}
-#line 1442 "syntax.tab.c"
+#line 38 "syntax.y"
+                                                {yyval = build_syntax_node("Program", (yyloc)); add_children(2, yyval, yyvsp[0]); root = yyval;}
+#line 1554 "syntax.tab.c"
     break;
 
   case 3:
-#line 38 "syntax.y"
-                                                {yyval = build_syntax_node("ExtDefList"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
-#line 1448 "syntax.tab.c"
+#line 40 "syntax.y"
+                                                {yyval = build_syntax_node("ExtDefList", (yyloc)); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+#line 1560 "syntax.tab.c"
     break;
 
   case 4:
-#line 39 "syntax.y"
-                                                {yyval = build_syntax_node("ExtDefList");}
-#line 1454 "syntax.tab.c"
+#line 41 "syntax.y"
+                                                {yyval = build_syntax_node("ExtDefList", (yyloc));}
+#line 1566 "syntax.tab.c"
     break;
 
   case 5:
-#line 41 "syntax.y"
-                                                {yyval = build_syntax_node("ExtDef"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1460 "syntax.tab.c"
+#line 43 "syntax.y"
+                                                {yyval = build_syntax_node("ExtDef", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1572 "syntax.tab.c"
     break;
 
   case 6:
-#line 42 "syntax.y"
-                                                {yyval = build_syntax_node("ExtDef"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
-#line 1466 "syntax.tab.c"
+#line 44 "syntax.y"
+                                                {yyval = build_syntax_node("ExtDef", (yyloc)); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+#line 1578 "syntax.tab.c"
     break;
 
   case 7:
-#line 43 "syntax.y"
-                                                {yyval = build_syntax_node("ExtDef"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1472 "syntax.tab.c"
+#line 45 "syntax.y"
+                                                {yyval = build_syntax_node("ExtDef", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1584 "syntax.tab.c"
     break;
 
   case 9:
-#line 46 "syntax.y"
-                                                {yyval = build_syntax_node("ExtDecList"); add_children(2, yyval, yyvsp[0]);}
-#line 1478 "syntax.tab.c"
+#line 48 "syntax.y"
+                                                {yyval = build_syntax_node("ExtDecList", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1590 "syntax.tab.c"
     break;
 
   case 10:
-#line 47 "syntax.y"
-                                                {yyval = build_syntax_node("ExtDecList"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1484 "syntax.tab.c"
+#line 49 "syntax.y"
+                                                {yyval = build_syntax_node("ExtDecList", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1596 "syntax.tab.c"
     break;
 
   case 11:
-#line 50 "syntax.y"
-                                                {yyval = build_syntax_node("Specifier"); add_children(2, yyval, yyvsp[0]);}
-#line 1490 "syntax.tab.c"
+#line 52 "syntax.y"
+                                                {yyval = build_syntax_node("Specifier", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1602 "syntax.tab.c"
     break;
 
   case 12:
-#line 51 "syntax.y"
-                                                {yyval = build_syntax_node("Specifier"); add_children(2, yyval, yyvsp[0]);}
-#line 1496 "syntax.tab.c"
+#line 53 "syntax.y"
+                                                {yyval = build_syntax_node("Specifier", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1608 "syntax.tab.c"
     break;
 
   case 13:
-#line 53 "syntax.y"
-                                                {yyval = build_syntax_node("StructSpecifier"); add_children(6, yyval, yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1502 "syntax.tab.c"
+#line 55 "syntax.y"
+                                                {yyval = build_syntax_node("StructSpecifier", (yyloc)); add_children(6, yyval, yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1614 "syntax.tab.c"
     break;
 
   case 14:
-#line 54 "syntax.y"
-                                                {yyval = build_syntax_node("StructSpecifier"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
-#line 1508 "syntax.tab.c"
+#line 56 "syntax.y"
+                                                {yyval = build_syntax_node("StructSpecifier", (yyloc)); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+#line 1620 "syntax.tab.c"
     break;
 
   case 15:
-#line 56 "syntax.y"
-                                                {yyval = build_syntax_node("OptTag"); add_children(2, yyval, yyvsp[0]);}
-#line 1514 "syntax.tab.c"
+#line 58 "syntax.y"
+                                                {yyval = build_syntax_node("OptTag", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1626 "syntax.tab.c"
     break;
 
   case 16:
-#line 57 "syntax.y"
-                                                {yyval = build_syntax_node("OptTag");}
-#line 1520 "syntax.tab.c"
+#line 59 "syntax.y"
+                                                {yyval = build_syntax_node("OptTag", (yyloc));}
+#line 1632 "syntax.tab.c"
     break;
 
   case 17:
-#line 59 "syntax.y"
-                                                {yyval = build_syntax_node("Tag"); add_children(2, yyval, yyvsp[0]);}
-#line 1526 "syntax.tab.c"
+#line 61 "syntax.y"
+                                                {yyval = build_syntax_node("Tag", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1638 "syntax.tab.c"
     break;
 
   case 18:
-#line 62 "syntax.y"
-                                                {yyval = build_syntax_node("VarDec"); add_children(2, yyval, yyvsp[0]);}
-#line 1532 "syntax.tab.c"
+#line 64 "syntax.y"
+                                                {yyval = build_syntax_node("VarDec", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1644 "syntax.tab.c"
     break;
 
   case 19:
-#line 63 "syntax.y"
-                                                {yyval = build_syntax_node("VarDec"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1538 "syntax.tab.c"
+#line 65 "syntax.y"
+                                                {yyval = build_syntax_node("VarDec", (yyloc)); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1650 "syntax.tab.c"
     break;
 
   case 20:
-#line 65 "syntax.y"
-                                                {yyval = build_syntax_node("FunDec"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1544 "syntax.tab.c"
+#line 67 "syntax.y"
+                                                {yyval = build_syntax_node("FunDec", (yyloc)); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1656 "syntax.tab.c"
     break;
 
   case 21:
-#line 66 "syntax.y"
-                                                {yyval = build_syntax_node("FunDec"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1550 "syntax.tab.c"
+#line 68 "syntax.y"
+                                                {yyval = build_syntax_node("FunDec", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1662 "syntax.tab.c"
     break;
 
   case 22:
-#line 68 "syntax.y"
-                                                {yyval = build_syntax_node("VarList"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1556 "syntax.tab.c"
+#line 70 "syntax.y"
+                                                {yyval = build_syntax_node("VarList", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1668 "syntax.tab.c"
     break;
 
   case 23:
-#line 69 "syntax.y"
-                                                {yyval = build_syntax_node("VarList"); add_children(2, yyval, yyvsp[0]);}
-#line 1562 "syntax.tab.c"
+#line 71 "syntax.y"
+                                                {yyval = build_syntax_node("VarList", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1674 "syntax.tab.c"
     break;
 
   case 24:
-#line 71 "syntax.y"
-                                                {yyval = build_syntax_node("ParamDec"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
-#line 1568 "syntax.tab.c"
+#line 73 "syntax.y"
+                                                {yyval = build_syntax_node("ParamDec", (yyloc)); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+#line 1680 "syntax.tab.c"
     break;
 
   case 25:
-#line 74 "syntax.y"
-                                                {yyval = build_syntax_node("CompSt"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1574 "syntax.tab.c"
+#line 76 "syntax.y"
+                                                {yyval = build_syntax_node("CompSt", (yyloc)); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1686 "syntax.tab.c"
     break;
 
   case 26:
-#line 76 "syntax.y"
-                                                {yyval = build_syntax_node("StmtList"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
-#line 1580 "syntax.tab.c"
+#line 78 "syntax.y"
+                                                {yyval = build_syntax_node("StmtList", (yyloc)); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+#line 1692 "syntax.tab.c"
     break;
 
   case 27:
-#line 77 "syntax.y"
-                                                {yyval = build_syntax_node("StmtList");}
-#line 1586 "syntax.tab.c"
+#line 79 "syntax.y"
+                                                {yyval = build_syntax_node("StmtList", (yyloc));}
+#line 1698 "syntax.tab.c"
     break;
 
   case 28:
-#line 79 "syntax.y"
-                                                {yyval = build_syntax_node("Stmt"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
-#line 1592 "syntax.tab.c"
+#line 81 "syntax.y"
+                                                {yyval = build_syntax_node("Stmt", (yyloc)); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+#line 1704 "syntax.tab.c"
     break;
 
   case 29:
-#line 80 "syntax.y"
-                                                {yyval = build_syntax_node("Stmt"); add_children(2, yyval, yyvsp[0]);}
-#line 1598 "syntax.tab.c"
+#line 82 "syntax.y"
+                                                {yyval = build_syntax_node("Stmt", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1710 "syntax.tab.c"
     break;
 
   case 30:
-#line 81 "syntax.y"
-                                                {yyval = build_syntax_node("Stmt"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1604 "syntax.tab.c"
+#line 83 "syntax.y"
+                                                {yyval = build_syntax_node("Stmt", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1716 "syntax.tab.c"
     break;
 
   case 31:
-#line 82 "syntax.y"
-                                                {yyval = build_syntax_node("Stmt"); add_children(6, yyval, yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1610 "syntax.tab.c"
+#line 84 "syntax.y"
+                                                {yyval = build_syntax_node("Stmt", (yyloc)); add_children(6, yyval, yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1722 "syntax.tab.c"
     break;
 
   case 32:
-#line 83 "syntax.y"
-                                                {yyval = build_syntax_node("Stmt"); add_children(6, yyval, yyvsp[-6], yyvsp[-5], yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1616 "syntax.tab.c"
+#line 85 "syntax.y"
+                                                {yyval = build_syntax_node("Stmt", (yyloc)); add_children(6, yyval, yyvsp[-6], yyvsp[-5], yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1728 "syntax.tab.c"
     break;
 
   case 33:
-#line 84 "syntax.y"
-                                                {yyval = build_syntax_node("Stmt"); add_children(6, yyval, yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1622 "syntax.tab.c"
+#line 86 "syntax.y"
+                                                {yyval = build_syntax_node("Stmt", (yyloc)); add_children(6, yyval, yyvsp[-4], yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1734 "syntax.tab.c"
     break;
 
   case 35:
-#line 88 "syntax.y"
-                                                {yyval = build_syntax_node("DefList"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
-#line 1628 "syntax.tab.c"
+#line 90 "syntax.y"
+                                                {yyval = build_syntax_node("DefList", (yyloc)); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+#line 1740 "syntax.tab.c"
     break;
 
   case 36:
-#line 89 "syntax.y"
-                                                {yyval = build_syntax_node("DefList");}
-#line 1634 "syntax.tab.c"
+#line 91 "syntax.y"
+                                                {yyval = build_syntax_node("DefList", (yyloc));}
+#line 1746 "syntax.tab.c"
     break;
 
   case 37:
-#line 91 "syntax.y"
-                                                {yyval = build_syntax_node("Def"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1640 "syntax.tab.c"
+#line 93 "syntax.y"
+                                                {yyval = build_syntax_node("Def", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1752 "syntax.tab.c"
     break;
 
   case 38:
-#line 93 "syntax.y"
-                                                {yyval = build_syntax_node("DecList"); add_children(2, yyval, yyvsp[0]);}
-#line 1646 "syntax.tab.c"
+#line 95 "syntax.y"
+                                                {yyval = build_syntax_node("DecList", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1758 "syntax.tab.c"
     break;
 
   case 39:
-#line 94 "syntax.y"
-                                                {yyval = build_syntax_node("DecList"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1652 "syntax.tab.c"
+#line 96 "syntax.y"
+                                                {yyval = build_syntax_node("DecList", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1764 "syntax.tab.c"
     break;
 
   case 40:
-#line 96 "syntax.y"
-                                                {yyval = build_syntax_node("Dec"); add_children(2, yyval, yyvsp[0]);}
-#line 1658 "syntax.tab.c"
+#line 98 "syntax.y"
+                                                {yyval = build_syntax_node("Dec", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1770 "syntax.tab.c"
     break;
 
   case 41:
-#line 97 "syntax.y"
-                                                {yyval = build_syntax_node("Dec"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1664 "syntax.tab.c"
+#line 99 "syntax.y"
+                                                {yyval = build_syntax_node("Dec", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1776 "syntax.tab.c"
     break;
 
   case 42:
-#line 100 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1670 "syntax.tab.c"
+#line 102 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1782 "syntax.tab.c"
     break;
 
   case 43:
-#line 101 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1676 "syntax.tab.c"
+#line 103 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1788 "syntax.tab.c"
     break;
 
   case 44:
-#line 102 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1682 "syntax.tab.c"
+#line 104 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1794 "syntax.tab.c"
     break;
 
   case 45:
-#line 103 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1688 "syntax.tab.c"
+#line 105 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1800 "syntax.tab.c"
     break;
 
   case 46:
-#line 104 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1694 "syntax.tab.c"
+#line 106 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1806 "syntax.tab.c"
     break;
 
   case 47:
-#line 105 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1700 "syntax.tab.c"
+#line 107 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1812 "syntax.tab.c"
     break;
 
   case 48:
-#line 106 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1706 "syntax.tab.c"
+#line 108 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1818 "syntax.tab.c"
     break;
 
   case 49:
-#line 107 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1712 "syntax.tab.c"
+#line 109 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1824 "syntax.tab.c"
     break;
 
   case 50:
-#line 108 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1718 "syntax.tab.c"
+#line 110 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1830 "syntax.tab.c"
     break;
 
   case 51:
-#line 109 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
-#line 1724 "syntax.tab.c"
+#line 111 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+#line 1836 "syntax.tab.c"
     break;
 
   case 52:
-#line 110 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
-#line 1730 "syntax.tab.c"
+#line 112 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(3, yyval, yyvsp[-1], yyvsp[0]);}
+#line 1842 "syntax.tab.c"
     break;
 
   case 53:
-#line 111 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1736 "syntax.tab.c"
+#line 113 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1848 "syntax.tab.c"
     break;
 
   case 54:
-#line 112 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1742 "syntax.tab.c"
+#line 114 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1854 "syntax.tab.c"
     break;
 
   case 55:
-#line 113 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1748 "syntax.tab.c"
+#line 115 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(5, yyval, yyvsp[-3], yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1860 "syntax.tab.c"
     break;
 
   case 56:
-#line 114 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1754 "syntax.tab.c"
+#line 116 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1866 "syntax.tab.c"
     break;
 
   case 57:
-#line 115 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(2, yyval, yyvsp[0]);}
-#line 1760 "syntax.tab.c"
+#line 117 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1872 "syntax.tab.c"
     break;
 
   case 58:
-#line 116 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(2, yyval, yyvsp[0]);}
-#line 1766 "syntax.tab.c"
+#line 118 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1878 "syntax.tab.c"
     break;
 
   case 59:
-#line 117 "syntax.y"
-                                                {yyval = build_syntax_node("Exp"); add_children(2, yyval, yyvsp[0]);}
-#line 1772 "syntax.tab.c"
+#line 119 "syntax.y"
+                                                {yyval = build_syntax_node("Exp", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1884 "syntax.tab.c"
     break;
 
   case 60:
-#line 119 "syntax.y"
-                                                {yyval = build_syntax_node("Args"); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
-#line 1778 "syntax.tab.c"
+#line 121 "syntax.y"
+                                                {yyval = build_syntax_node("Args", (yyloc)); add_children(4, yyval, yyvsp[-2], yyvsp[-1], yyvsp[0]);}
+#line 1890 "syntax.tab.c"
     break;
 
   case 61:
-#line 120 "syntax.y"
-                                                {yyval = build_syntax_node("Args"); add_children(2, yyval, yyvsp[0]);}
-#line 1784 "syntax.tab.c"
+#line 122 "syntax.y"
+                                                {yyval = build_syntax_node("Args", (yyloc)); add_children(2, yyval, yyvsp[0]);}
+#line 1896 "syntax.tab.c"
     break;
 
 
-#line 1788 "syntax.tab.c"
+#line 1900 "syntax.tab.c"
 
       default: break;
     }
@@ -1806,6 +1918,7 @@ yyreduce:
   YY_STACK_PRINT (yyss, yyssp);
 
   *++yyvsp = yyval;
+  *++yylsp = yyloc;
 
   /* Now 'shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
@@ -1869,7 +1982,7 @@ yyerrlab:
 #endif
     }
 
-
+  yyerror_range[1] = yylloc;
 
   if (yyerrstatus == 3)
     {
@@ -1885,7 +1998,7 @@ yyerrlab:
       else
         {
           yydestruct ("Error: discarding",
-                      yytoken, &yylval);
+                      yytoken, &yylval, &yylloc);
           yychar = YYEMPTY;
         }
     }
@@ -1937,9 +2050,9 @@ yyerrlab1:
       if (yyssp == yyss)
         YYABORT;
 
-
+      yyerror_range[1] = *yylsp;
       yydestruct ("Error: popping",
-                  yystos[yystate], yyvsp);
+                  yystos[yystate], yyvsp, yylsp);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1949,6 +2062,11 @@ yyerrlab1:
   *++yyvsp = yylval;
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 
+  yyerror_range[2] = yylloc;
+  /* Using YYLLOC is tempting, but would change the location of
+     the lookahead.  YYLOC is available though.  */
+  YYLLOC_DEFAULT (yyloc, yyerror_range, 2);
+  *++yylsp = yyloc;
 
   /* Shift the error token.  */
   YY_SYMBOL_PRINT ("Shifting", yystos[yyn], yyvsp, yylsp);
@@ -1994,7 +2112,7 @@ yyreturn:
          user semantic actions for why this is necessary.  */
       yytoken = YYTRANSLATE (yychar);
       yydestruct ("Cleanup: discarding lookahead",
-                  yytoken, &yylval);
+                  yytoken, &yylval, &yylloc);
     }
   /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
@@ -2003,7 +2121,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-                  yystos[+*yyssp], yyvsp);
+                  yystos[+*yyssp], yyvsp, yylsp);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -2016,10 +2134,10 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 123 "syntax.y"
+#line 125 "syntax.y"
 
 
 int yyerror(char* msg){
     pass = 0;
-    fprintf(stderr, "Error type B at Line %d: Something Wrong! %s\n", yylineno, yytext);
+    fprintf(stderr, "Error type B at Line %d:blablabla...\n", yylineno);
 }

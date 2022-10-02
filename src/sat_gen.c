@@ -43,12 +43,12 @@ Node* build_lexical_node(char* n, char* v){
     return root;
 }
 
-Node* build_syntax_node(char* n){
+Node* build_syntax_node(char* n, YYLTYPE location){
     /*初始化非终结符号节点*/
     Node* root = (Node *)malloc(sizeof(Node));
     root->ntype = SYNTAX;
     root->name = n;
-    root->u.syn_line = yylineno;
+    root->u.syn_line = location.first_line;
     root->children = NULL;
     root->tail = NULL;
     root->next = NULL;

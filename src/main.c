@@ -27,11 +27,7 @@ int main(int argc, char** argv){
     yyrestart(f);
     yyparse();
     if(pass == 1){
-        printf("\033[32mPassed!\n\033[0m");
         print_tree(root, 0);
-    }
-    else{
-        printf("\033[31mFault!\n\033[0m");
     }
     return 0;
 }

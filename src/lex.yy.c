@@ -525,14 +525,22 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "lexical.l"
-#line 2 "lexical.l"
+#line 4 "lexical.l"
     #include "sat_gen.h"
     #define YYSTYPE Node*
     #include "syntax.tab.h"
     #include<stdio.h>
     extern int pass;
-    #define TOKENINIT(n) yylval = build_lexical_node(n, n);
-#line 536 "lex.yy.c"
+    #define TOKENINIT(t, v) yylval = build_lexical_node(t, v);
+    #define TOKENINIT_TVSAME(n) yylval = build_lexical_node(n, n);
+
+    int yycolumn = 1;
+    #define YY_USER_ACTION \
+        yylloc.first_line = yylloc.last_line = yylineno; \
+        yylloc.first_column = yycolumn; \
+        yylloc.last_column = yycolumn + yyleng - 1; \
+        yycolumn += yyleng;
+#line 544 "lex.yy.c"
 /*integer data*/
 /*float data*/
 /*key words*/
@@ -543,7 +551,7 @@ char *yytext;
 /*assignment operators*/
 /*parentheses*/
 /*others*/
-#line 547 "lex.yy.c"
+#line 555 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -760,11 +768,11 @@ YY_DECL
 		}
 
 	{
-#line 52 "lexical.l"
+#line 61 "lexical.l"
 
 
 
-#line 768 "lex.yy.c"
+#line 776 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -833,165 +841,165 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 55 "lexical.l"
-{yylval = build_lexical_node("INT", yytext); return INT;}
+#line 64 "lexical.l"
+{TOKENINIT("INT", yytext); return INT;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 57 "lexical.l"
-{yylval = build_lexical_node("FLOAT", yytext); return FLOAT;}
+#line 66 "lexical.l"
+{TOKENINIT("FLOAT", yytext); return FLOAT;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 59 "lexical.l"
-{TOKENINIT("TYPE"); return TYPE;}
+#line 68 "lexical.l"
+{TOKENINIT("TYPE", yytext); return TYPE;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 60 "lexical.l"
-{TOKENINIT("STRUCT"); return STRUCT;}
+#line 69 "lexical.l"
+{TOKENINIT_TVSAME("STRUCT"); return STRUCT;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 61 "lexical.l"
-{TOKENINIT("RETURN"); return RETURN;}
+#line 70 "lexical.l"
+{TOKENINIT_TVSAME("RETURN"); return RETURN;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 62 "lexical.l"
-{TOKENINIT("IF"); return IF;}
+#line 71 "lexical.l"
+{TOKENINIT_TVSAME("IF"); return IF;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 63 "lexical.l"
-{TOKENINIT("ELSE"); return ELSE;}
+#line 72 "lexical.l"
+{TOKENINIT_TVSAME("ELSE"); return ELSE;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 64 "lexical.l"
-{TOKENINIT("WHILE"); return WHILE;}
+#line 73 "lexical.l"
+{TOKENINIT_TVSAME("WHILE"); return WHILE;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 66 "lexical.l"
-{TOKENINIT("ID"); return ID;}
+#line 75 "lexical.l"
+{TOKENINIT("ID", yytext); return ID;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 68 "lexical.l"
-{TOKENINIT("AND"); return AND;}
+#line 77 "lexical.l"
+{TOKENINIT_TVSAME("AND"); return AND;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 69 "lexical.l"
-{TOKENINIT("OR"); return OR;}
+#line 78 "lexical.l"
+{TOKENINIT_TVSAME("OR"); return OR;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 70 "lexical.l"
-{TOKENINIT("NOT"); return NOT;}
+#line 79 "lexical.l"
+{TOKENINIT_TVSAME("NOT"); return NOT;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 72 "lexical.l"
-{TOKENINIT("PLUS"); return PLUS;}
+#line 81 "lexical.l"
+{TOKENINIT_TVSAME("PLUS"); return PLUS;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 73 "lexical.l"
-{TOKENINIT("MINUS"); return MINUS;}
+#line 82 "lexical.l"
+{TOKENINIT_TVSAME("MINUS"); return MINUS;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 74 "lexical.l"
-{TOKENINIT("STAR"); return STAR;}
+#line 83 "lexical.l"
+{TOKENINIT_TVSAME("STAR"); return STAR;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 75 "lexical.l"
-{TOKENINIT("DIV"); return DIV;}
+#line 84 "lexical.l"
+{TOKENINIT_TVSAME("DIV"); return DIV;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 77 "lexical.l"
-{TOKENINIT("RELOP"); return RELOP;}
+#line 86 "lexical.l"
+{TOKENINIT_TVSAME("RELOP"); return RELOP;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 79 "lexical.l"
-{TOKENINIT("ASSIGNOP"); return ASSIGNOP;}
+#line 88 "lexical.l"
+{TOKENINIT_TVSAME("ASSIGNOP"); return ASSIGNOP;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 82 "lexical.l"
-{TOKENINIT("LP"); return LP;}
+#line 91 "lexical.l"
+{TOKENINIT_TVSAME("LP"); return LP;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 83 "lexical.l"
-{TOKENINIT("RP"); return RP;}
+#line 92 "lexical.l"
+{TOKENINIT_TVSAME("RP"); return RP;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 84 "lexical.l"
-{TOKENINIT("LB"); return LB;}
+#line 93 "lexical.l"
+{TOKENINIT_TVSAME("LB"); return LB;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 85 "lexical.l"
-{TOKENINIT("RB"); return RB;}
+#line 94 "lexical.l"
+{TOKENINIT_TVSAME("RB"); return RB;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 86 "lexical.l"
-{TOKENINIT("LC"); return LC;}
+#line 95 "lexical.l"
+{TOKENINIT_TVSAME("LC"); return LC;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 87 "lexical.l"
-{TOKENINIT("RC"); return RC;} 
+#line 96 "lexical.l"
+{TOKENINIT_TVSAME("RC"); return RC;} 
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 89 "lexical.l"
-{TOKENINIT("SEMI"); return SEMI;}
+#line 98 "lexical.l"
+{TOKENINIT_TVSAME("SEMI"); return SEMI;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 90 "lexical.l"
-{TOKENINIT("COMMA"); return COMMA;}
+#line 99 "lexical.l"
+{TOKENINIT_TVSAME("COMMA"); return COMMA;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 91 "lexical.l"
-{TOKENINIT("DOT"); return DOT;}
+#line 100 "lexical.l"
+{TOKENINIT_TVSAME("DOT"); return DOT;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 93 "lexical.l"
+#line 102 "lexical.l"
 
 	YY_BREAK
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 94 "lexical.l"
-
+#line 103 "lexical.l"
+{yycolumn = 1;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 96 "lexical.l"
+#line 105 "lexical.l"
 {
     /*Type A: fault report*/
     pass = 0;
-    printf("Error type A at Line %d: Mysterious characters \'%s\'\n", yylineno, yytext);
+    printf("Error type A at Line %d:blablabla...\n", yylineno);
 }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 101 "lexical.l"
+#line 110 "lexical.l"
 ECHO;
 	YY_BREAK
-#line 995 "lex.yy.c"
+#line 1003 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2008,6 +2016,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 101 "lexical.l"
+#line 110 "lexical.l"
 
 
