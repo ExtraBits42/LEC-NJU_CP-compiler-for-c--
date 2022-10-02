@@ -8,7 +8,7 @@ bison-d: lexical.l syntax.y
 exec: main.c syntax.tab.c
 	gcc main.c syntax.tab.c -lfl -ly -o parser
 
-all: main.c lexical.l syntax.y
+parser: main.c lexical.l syntax.y
 	make clean
 	make bison-d
 	make flex
