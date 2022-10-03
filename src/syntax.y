@@ -84,6 +84,7 @@ Stmt : Exp SEMI                                 {$$ = build_syntax_node("Stmt", 
     | IF LP Exp RP Stmt %prec LOWER_THAN_ELSE   {$$ = build_syntax_node("Stmt", @$); add_children(6, $$, $1, $2, $3, $4, $5);}
     | IF LP Exp RP Stmt ELSE Stmt               {$$ = build_syntax_node("Stmt", @$); add_children(8, $$, $1, $2, $3, $4, $5, $6, $7);}
     | WHILE LP Exp RP Stmt                      {$$ = build_syntax_node("Stmt", @$); add_children(6, $$, $1, $2, $3, $4, $5);}
+    | IF LP Exp error RP Stmt ELSE Stmt
     ;
 /*Local Definitions*/
 DefList : Def DefList                           {$$ = build_syntax_node("DefList", @$); add_children(3, $$, $1, $2);}
