@@ -19,11 +19,11 @@
 
 /*integer data*/
 INT10 ([0-9])|([1-9][0-9]+)
-INT8 [0][1-7][0-7]+
+INT8 [0][0-7]+
 INT16 ("0x"|"0X")[0-9a-fA-F]+
 /*float data*/
-FLOAT (([0-9]\.[0-9]+)|[1-9][0-9]+\.[0-9]+)
-FLOATE ((\.[0-9]+)|({INT10}\.)|({INT10}\.[0-9]+))[eE][\+,-]?{INT10}
+FLOAT (([0-9]"."[0-9]+)|[1-9][0-9]+"."[0-9]+)
+FLOATE [0-9]*"."[0-9]*[eE]("+"|"-")[0-9]*
 /*key words*/
 TYPE ("int"|"float")
 STRUCT ("struct")
@@ -128,6 +128,6 @@ MCOMMENT "/*"
 . {
     /*Type A: fault report*/
     pass = 0;
-    printf("Error type A at Line %d:blablabla...\n", yylineno);
+    printf("Error type A at Line %d:blablabla... %s\n", yylineno, yytext);
 }
 %%

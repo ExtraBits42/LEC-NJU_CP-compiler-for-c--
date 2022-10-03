@@ -54,6 +54,7 @@ Specifier : TYPE                                {$$ = build_syntax_node("Specifi
     ;
 StructSpecifier : STRUCT OptTag LC DefList RC   {$$ = build_syntax_node("StructSpecifier", @$); add_children(6, $$, $1, $2, $3, $4, $5);}
     | STRUCT Tag                                {$$ = build_syntax_node("StructSpecifier", @$); add_children(3, $$, $1, $2);}
+    | error RC
     ;
 OptTag : ID                                     {$$ = build_syntax_node("OptTag", @$); add_children(2, $$, $1);}
     |                                           {$$ = build_syntax_node("OptTag", @$);}
@@ -84,13 +85,13 @@ Stmt : Exp SEMI                                 {$$ = build_syntax_node("Stmt", 
     | IF LP Exp RP Stmt %prec LOWER_THAN_ELSE   {$$ = build_syntax_node("Stmt", @$); add_children(6, $$, $1, $2, $3, $4, $5);}
     | IF LP Exp RP Stmt ELSE Stmt               {$$ = build_syntax_node("Stmt", @$); add_children(8, $$, $1, $2, $3, $4, $5, $6, $7);}
     | WHILE LP Exp RP Stmt                      {$$ = build_syntax_node("Stmt", @$); add_children(6, $$, $1, $2, $3, $4, $5);}
-    | error SEMI
     ;
 /*Local Definitions*/
 DefList : Def DefList                           {$$ = build_syntax_node("DefList", @$); add_children(3, $$, $1, $2);}
     |                                           {$$ = build_syntax_node("DefList", @$);}
     ;
 Def : Specifier DecList SEMI                    {$$ = build_syntax_node("Def", @$); add_children(4, $$, $1, $2, $3);}
+    | error SEMI
     ;
 DecList : Dec                                   {$$ = build_syntax_node("DecList", @$); add_children(2, $$, $1);}
     | Dec COMMA DecList                         {$$ = build_syntax_node("DecList", @$); add_children(4, $$, $1, $2, $3);}
@@ -126,7 +127,7 @@ Args : Exp COMMA Args                           {$$ = build_syntax_node("Args", 
 
 int yyerror(char* msg){
     pass = 0;
-    fprintf(stderr, "Error type B at Line %d:blablabla...\n", yylineno);
+    fprintf(stderr, "Error type B at Line %d: %s\n", yylineno, yytext);
 }
 
 
