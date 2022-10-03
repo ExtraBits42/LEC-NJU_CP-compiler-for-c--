@@ -23,7 +23,7 @@ INT8 [0][0-7]+
 INT16 ("0x"|"0X")[0-9a-fA-F]+
 /*float data*/
 FLOAT (([0-9]"."[0-9]+)|[1-9][0-9]+"."[0-9]+)
-FLOATE [0-9]*"."[0-9]*[eE]("+"|"-")[0-9]*
+FLOATE (([0-9]+".")|("."[0-9]+)|([0-9]+"."[0-9]+))("e"|"E")("+"|"-")?(([0-9])+)
 /*key words*/
 TYPE ("int"|"float")
 STRUCT ("struct")
@@ -65,45 +65,45 @@ MCOMMENT "/*"
 %%
 
 
-{INT10} {TOKENINIT("INT10", yytext); return INT;}
-{INT8} {TOKENINIT("INT8", yytext); return INT;}
-{INT16} {TOKENINIT("INT16", yytext); return INT;}
+{INT10} { TOKENINIT("INT10", yytext); return INT;}
+{INT8} { TOKENINIT("INT8", yytext); return INT;}
+{INT16} { TOKENINIT("INT16", yytext); return INT;}
 
-{FLOAT}|{FLOATE} {TOKENINIT("FLOAT", yytext); return FLOAT;}
+{FLOATE}|{FLOAT} { TOKENINIT("FLOAT", yytext); return FLOAT;}
 
-{TYPE} {TOKENINIT("TYPE", yytext); return TYPE;}
-{STRUCT} {TOKENINIT_TVSAME("STRUCT"); return STRUCT;}
-{RETURN} {TOKENINIT_TVSAME("RETURN"); return RETURN;}
-{IF} {TOKENINIT_TVSAME("IF"); return IF;}
-{ELSE} {TOKENINIT_TVSAME("ELSE"); return ELSE;}
-{WHILE} {TOKENINIT_TVSAME("WHILE"); return WHILE;}
+{TYPE} { TOKENINIT("TYPE", yytext); return TYPE;}
+{STRUCT} { TOKENINIT_TVSAME("STRUCT"); return STRUCT;}
+{RETURN} { TOKENINIT_TVSAME("RETURN"); return RETURN;}
+{IF} { TOKENINIT_TVSAME("IF"); return IF;}
+{ELSE} { TOKENINIT_TVSAME("ELSE"); return ELSE;}
+{WHILE} { TOKENINIT_TVSAME("WHILE"); return WHILE;}
 
-{ID} {TOKENINIT("ID", yytext); return ID;}
+{ID} { TOKENINIT("ID", yytext); return ID;}
 
-{AND} {TOKENINIT_TVSAME("AND"); return AND;}
-{OR} {TOKENINIT_TVSAME("OR"); return OR;}
-{NOT} {TOKENINIT_TVSAME("NOT"); return NOT;}
+{AND} { TOKENINIT_TVSAME("AND"); return AND;}
+{OR} { TOKENINIT_TVSAME("OR"); return OR;}
+{NOT} { TOKENINIT_TVSAME("NOT"); return NOT;}
 
-{PLUS} {TOKENINIT_TVSAME("PLUS"); return PLUS;}
-{MINUS} {TOKENINIT_TVSAME("MINUS"); return MINUS;}
-{STAR} {TOKENINIT_TVSAME("STAR"); return STAR;}
-{DIV} {TOKENINIT_TVSAME("DIV"); return DIV;}
+{PLUS} { TOKENINIT_TVSAME("PLUS"); return PLUS;}
+{MINUS} { TOKENINIT_TVSAME("MINUS"); return MINUS;}
+{STAR} { TOKENINIT_TVSAME("STAR"); return STAR;}
+{DIV} { TOKENINIT_TVSAME("DIV"); return DIV;}
 
-{RELOP} {TOKENINIT_TVSAME("RELOP"); return RELOP;}
+{RELOP} { TOKENINIT_TVSAME("RELOP"); return RELOP;}
 
-{ASSIGNOP} {TOKENINIT_TVSAME("ASSIGNOP"); return ASSIGNOP;}
+{ASSIGNOP} { TOKENINIT_TVSAME("ASSIGNOP"); return ASSIGNOP;}
 
 
-{LP} {TOKENINIT_TVSAME("LP"); return LP;}
-{RP} {TOKENINIT_TVSAME("RP"); return RP;}
-{LB} {TOKENINIT_TVSAME("LB"); return LB;}
-{RB} {TOKENINIT_TVSAME("RB"); return RB;}
-{LC} {TOKENINIT_TVSAME("LC"); return LC;}
-{RC} {TOKENINIT_TVSAME("RC"); return RC;} 
+{LP} { TOKENINIT_TVSAME("LP"); return LP;}
+{RP} { TOKENINIT_TVSAME("RP"); return RP;}
+{LB} { TOKENINIT_TVSAME("LB"); return LB;}
+{RB} { TOKENINIT_TVSAME("RB"); return RB;}
+{LC} { TOKENINIT_TVSAME("LC"); return LC;}
+{RC} { TOKENINIT_TVSAME("RC"); return RC;} 
 
-{SEMI} {TOKENINIT_TVSAME("SEMI"); return SEMI;}
-{COMMA} {TOKENINIT_TVSAME("COMMA"); return COMMA;}
-{DOT} {TOKENINIT_TVSAME("DOT"); return DOT;}
+{SEMI} { TOKENINIT_TVSAME("SEMI"); return SEMI;}
+{COMMA} { TOKENINIT_TVSAME("COMMA"); return COMMA;}
+{DOT} { TOKENINIT_TVSAME("DOT"); return DOT;}
 
 
 {SCOMMENT} {
@@ -123,9 +123,10 @@ MCOMMENT "/*"
 }
 
 " " {}
-\n {yycolumn = 1;}
+\n { yycolumn = 1;}
 
 . {
+    
     /*Type A: fault report*/
     pass = 0;
     printf("Error type A at Line %d:blablabla... %s\n", yylineno, yytext);

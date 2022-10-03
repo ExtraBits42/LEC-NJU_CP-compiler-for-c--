@@ -54,7 +54,6 @@ Specifier : TYPE                                {$$ = build_syntax_node("Specifi
     ;
 StructSpecifier : STRUCT OptTag LC DefList RC   {$$ = build_syntax_node("StructSpecifier", @$); add_children(6, $$, $1, $2, $3, $4, $5);}
     | STRUCT Tag                                {$$ = build_syntax_node("StructSpecifier", @$); add_children(3, $$, $1, $2);}
-    | error RC
     ;
 OptTag : ID                                     {$$ = build_syntax_node("OptTag", @$); add_children(2, $$, $1);}
     |                                           {$$ = build_syntax_node("OptTag", @$);}
@@ -128,6 +127,13 @@ Args : Exp COMMA Args                           {$$ = build_syntax_node("Args", 
 int yyerror(char* msg){
     pass = 0;
     fprintf(stderr, "Error type B at Line %d: %s\n", yylineno, yytext);
+    /*
+    printf("%s\n", yytext);
+    for(int i = 0; i < 300; i++){
+        char ch = input();
+        printf("%c", ch);
+    }
+    */
 }
 
 
