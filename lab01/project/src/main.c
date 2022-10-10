@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include"sat_gen.h"
+#include"general.h"
 
 /*declarations*/
 extern int yyleng;
@@ -11,8 +11,8 @@ extern int yyrestart(FILE* f);
 extern int yyparse();
 
 /*global variables*/
-int pass = 1;
-Node *root = NULL;
+int pass = 1;               // 标识：1-通过编译，0-未通过编译，出现错误
+Node *root = NULL;          // 语法分析树根节点
 
 /*main function*/
 int main(int argc, char** argv){

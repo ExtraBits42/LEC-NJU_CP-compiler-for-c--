@@ -1,15 +1,16 @@
 %option yylineno
 
 %{
-    #include "sat_gen.h"
+    #include<stdio.h>
+    #include "general.h"
     #define YYSTYPE Node*
     #include "syntax.tab.h"
-    #include<stdio.h>
+    
     extern int pass;
+    int yycolumn = 1;
+
     #define TOKENINIT(t, v) yylval = build_lexical_node(t, v);
     #define TOKENINIT_TVSAME(n) yylval = build_lexical_node(n, n);
-
-    int yycolumn = 1;
     #define YY_USER_ACTION \
         yylloc.first_line = yylloc.last_line = yylineno; \
         yylloc.first_column = yycolumn; \

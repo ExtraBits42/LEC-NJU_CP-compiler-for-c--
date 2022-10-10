@@ -1,28 +1,29 @@
-# One step: GNU-Flex generate lexical Analysis
-flex: lexical.l
+# multi steps
+# generate lexical analyzer and syntax analyzer
+parser: main.c lexical.l syntax.y general.h sat_gen.c ./utils/utils.h ./utils/utils.c
+	make clean
 	flex lexical.l
+	bison -d syntax.y
+	flex lexical.l
+	gcc main.c syntax.tab.c sat_gen.c ./utils/utils.c -lfl -ly -o parser
+# clean up all middle source files
+clean:
+	rm -rf scanner lex.yy.c parser syntax.tab.c syntax.tab.h
 
-bison-d: lexical.l syntax.y
+# single step
+bison-d : lexical.l syntax.y
+	flex lexical.l
 	bison -d syntax.y
 
-exec: main.c syntax.tab.c
-	gcc main.c syntax.tab.c -lfl -ly -o parser
 
-parser: main.c lexical.l syntax.y
-	make clean
-	make bison-d
-	make flex
-	gcc main.c syntax.tab.c sat_gen.c -lfl -ly -o parser
-
+# debug
 test: parser test.cmm
 	./parser ./test.cmm
-
 all-t:
 	./parser ../testcases/basic-testcases/tc01.cmm
 	./parser ../testcases/basic-testcases/tc02.cmm
 	./parser ../testcases/basic-testcases/tc03.cmm
 	./parser ../testcases/basic-testcases/tc04.cmm
-
 all-extt:
 	./parser ../testcases/ext-testcases/tc01.cmm
 	./parser ../testcases/ext-testcases/tc02.cmm
@@ -30,7 +31,3 @@ all-extt:
 	./parser ../testcases/ext-testcases/tc04.cmm
 	./parser ../testcases/ext-testcases/tc05.cmm
 	./parser ../testcases/ext-testcases/tc06.cmm
-
-# clean unnecessary middle files
-clean:
-	rm -rf scanner lex.yy.c parser syntax.tab.c syntax.tab.h
