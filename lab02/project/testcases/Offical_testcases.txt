@@ -1,0 +1,628 @@
+A10:
+struct Person {
+  int pid;
+  float p_weight;
+  float p_height;
+
+  struct Car {
+    int c_id;
+    float c_price;
+  } cars[10];
+
+  struct {
+    int h_id;
+    float h_price;
+  } house;
+
+} people[100];
+
+
+struct Person me;
+struct Person alice;
+struct Person bob;
+
+float total_price(struct Person p) {
+  float price_sum = 0.0;
+  int num_car;
+  int car_idx;
+  if (p.pid > 10) {
+    num_car = 10;
+  } else {
+    num_car = 10;
+  }
+
+  car_idx = 0;
+  while (car_idx < num_car) {
+    price_sum = price_sum + p.cars[car_idx].c_price;
+  }
+  price_sum = price_sum + p.house.h_price;
+  return price_sum;
+}
+
+int main() {
+  float sum = total_price(people[10]);
+  float me_sum = total_price(me);
+  float alice_sum = total_price(alice);
+  float bob_sum = total_price(bob);
+
+  if (me_sum > sum) {
+    sum = me_sum[1];
+  } else {
+    sum = sum + me_sum;
+  }
+}
+
+A11:
+struct Person {
+  int pid;
+  float p_weight;
+  float p_height;
+
+  struct Car {
+    int c_id;
+    float c_price;
+  } cars[10];
+
+  struct {
+    int h_id;
+    float h_price;
+  } house;
+
+} people[100];
+
+
+struct Person me;
+struct Person alice;
+struct Person bob;
+
+int mix(struct Person p1, struct Person p2) {
+  struct Person mix_result;
+  if (p1.pid > p2.pid) {
+    mix_result = p1;
+  } else {
+    mix_result = p2;
+  }
+
+  mix_result.p_weight = p1.p_weight + p2.p_weight;
+  mix_result.p_height = p1.p_height + p2.p_height;
+  return 0;
+}
+
+
+int main() {
+  int me_alice = mix(me, alice);
+  int me_bob = mix(me, bob);
+  me_alice(me_bob);
+}
+
+A12:
+struct Car {
+  int c_id;
+  float c_price;
+};
+
+struct House {
+  int h_id;
+  float h_price;
+};
+
+struct Person {
+  int pid;
+  float p_weight;
+  float p_height;
+  struct Car car[10];
+  struct House house;
+};
+
+struct Person people[100];
+
+int is_higher(struct Person hp1, struct Person hp2) {
+  return hp1.p_weight > hp2.p_weight;
+}
+
+int is_fatter(struct Person fp1, struct Person fp2) {
+  return fp1.p_height > fp2.p_height;
+}
+
+int is_bigger(struct Person bp1, struct Person bp2) {
+  return is_higher(bp1, bp2) && is_fatter(bp1, bp2);
+}
+
+int main() {
+  struct Person me;
+  struct Person alice;
+  struct Person bob;
+  int idx = 0;
+  int num = 3;
+
+  people[0] = me;
+  people[1] = alice;
+  people[me.p_weight] = bob;
+
+  me.pid = 0;
+  alice.pid = 1;
+  bob.pid = 2;
+}
+
+A15:
+struct Dog {
+  int d_type;
+  int d_age;
+  float d_height;
+  float d_weight;
+};
+
+struct Cat {
+  int c_type;
+  int c_age;
+  float c_height;
+  float c_weight;
+};
+
+struct Fish {
+  int f_type;
+  int f_age;
+  float f_height;
+  float f_weight;
+};
+
+int main() {
+  int is_rich;
+  struct {
+    struct Dog d_pet;
+    struct Cat c_pet;
+    struct Fish f_pet;
+    int age = 10;
+    struct {
+      float price;
+    } house;
+  } p;
+
+  if (p.d_pet.d_age > 0 && p.c_pet.c_age > 0
+      && p.f_pet.f_age > 0 && p.house.price > 0) {
+    is_rich = 0;
+  }
+}
+
+A16:
+struct Person {
+  int pid;
+  float p_weight;
+  float p_height;
+
+  struct Car {
+    int c_id;
+    float c_price;
+  } cars[10];
+
+  struct {
+    int h_id;
+    float h_price;
+  } house;
+
+} people[100];
+
+struct Person me;
+struct Person alice;
+struct Person bob;
+
+int main() {
+  struct Group {
+    int gid;
+    struct Person {
+      int name;
+    } p;
+  } group;
+
+  if (group.gid > 0) {
+    people[0] = me;
+  } else {
+    people[0] = bob;
+  }
+}
+
+A17:
+struct Node {
+  int ntype;
+  int i_value;
+  float f_value;
+};
+
+struct NodeList {
+  int len;
+  int capacity;
+  struct Node nodes[100];
+} list;
+
+int lidx;
+struct Node empty_node;
+
+int init() {
+  lidx = 0;
+  list.len = 0;
+  list.capacity = 100;
+  empty_node.ntype = -1;
+  while (lidx < list.capacity) {
+    list.nodes[lidx] = empty_node;
+    lidx = lidx + 1;
+  }
+}
+
+struct NodeList max(struct NodeList l1, struct NodeList l2) {
+  int min_cap;
+  lidx = 0;
+  if (l1.capacity > l2.capacity) {
+    min_cap = l2.capacity;
+  } else {
+    min_cap = l1.capacity;
+  }
+  while (lidx < min_cap) {
+    struct Node n1 = l1.nodes[lidx];
+    struct Node n2 = l2.nodes[lidx];
+    if (n1.ntype == 0 && n2.ntype == 0) {
+      if (n1.i_value > n2.i_value) {
+        list.nodes[lidx] = n1;
+      } else {
+        list.nodes[lidx] = n2;
+      }
+    } else if (n1.ntype == 1 && n2.ntype == 1) {
+      if (n1.f_value > n2.f_value) {
+        list.nodes[lidx] = n1;
+      } else {
+        list.nodes[lidx] = n2;
+      }
+    } else {
+      struct ListNode dummy;
+      list.nodes[lidx] = dummy;
+    }
+    lidx = lidx + 1;
+  }
+}
+
+int main() {
+  struct NodeList list1;
+  struct NodeList list2;
+  max(list1, list2);
+}
+
+A18:
+struct Node {
+  int ntype;
+  int i_value;
+  float f_value;
+};
+
+struct NodeList {
+  int len;
+  int capacity;
+  struct Node nodes[100];
+} list;
+
+int lidx;
+struct Node empty_node;
+
+int init() {
+  lidx = 0;
+  list.len = 0;
+  list.capacity = 100;
+  empty_node.ntype = -1;
+  while (lidx < list.capacity) {
+    list.nodes[lidx] = empty_node;
+    lidx = lidx + 1;
+  }
+}
+
+int same_len(struct NodeList l1, struct NodeList l2) {
+  int Node = l1.len;
+  int node = l2.len;
+  return Node == node;
+}
+
+int main() {
+  struct NodeList list1;
+  struct NodeList list2;
+  same_len(list1, list2);
+}
+
+A19:
+struct Apple {
+  int a_color;
+  float a_size;
+  float a_price;
+};
+
+struct Banana {
+  float b_size;
+  float b_price;
+};
+
+struct Orange {
+  float o_size;
+  float o_weight;
+  float o_price;
+};
+
+float sum_price(struct Apple a1, struct Apple a2) {
+  return a1.a_price + a2.a_price;
+}
+
+struct Bag {
+  struct Apple apples[10];
+  struct Banana bananas[10];
+  struct Orange oranges[10];
+  struct {
+    float t_size;
+    float t_price;
+  } tag;
+} bags[10];
+
+int sum_weight() {
+  int oidx = 0;
+  int iidx = 0;
+  while (oidx < 10) {
+    iidx = 0;
+    while (iidx < 10) {
+      bags[oidx].tag.t_price = bags[oidx].tag.t_price
+        + bags[oidx].apples[iidx].a_price
+        + bags[oidx].bananas[iidx].b_price
+        + bags[oidx].oranges[iidx].o_price;
+      iidx = iidx + 1;
+    }
+    oidx = oidx + 1;
+  }
+}
+
+int main() {
+  struct Apple apple1;
+  struct Apple apple2;
+  float psum = sum_price(apple1);
+  sum_weight();
+}
+
+
+B1:
+struct RecVector {
+  int _buf[100];
+} recVector;
+
+int init(int iv0, int iv1) {
+  recVector._buf[0] = iv0;
+  recVector._buf[1] = iv1;
+}
+
+int prev(int p1idx) {
+  return recVector.buf[p1idx - 1];
+}
+
+int prevprev(int p2idx) {
+  return recVector._buf;
+}
+
+int next(int npp, int np) {
+  return npp * 2 + np;
+}
+
+int get(int gidx) {
+  return recVector._buf[gidx];
+}
+
+int get_val(int gvidx) {
+  int gcnt = 2;
+  while (gcnt <= gvidx) {
+    int gpp = prevprev(gcnt);
+    int gp = prev(gcnt);
+    recVector._buf[gcnt] = next(gpp, gp);
+    gcnt = gcnt + 1;
+  }
+  return get(gvidx);
+}
+
+int mod(int numtor, int denomtor) {
+  return numtor - (numtor / denomtor) * denomtor;
+}
+
+int count_prime(int prange) {
+  int gcnt = 2;
+  int num_prime = 0;
+  while (gcnt <= prange) {
+    int gpp = prevprev(gcnt);
+    int gp = prev(gcnt);
+    recVector._buf[gcnt] = next(gpp, gp);
+    if (mod(get(gcnt), 2) == 1) {
+      num_prime = num_prime + 1;
+    }
+    gcnt = gcnt + 1;
+  }
+
+  return num_prime;
+}
+
+int main() {
+  int primes;
+  init(1, 3) = 0;
+  primes = count_prime(10.0);
+}
+
+
+B2:
+struct Matrix {
+  int val[10][10];
+};
+
+int row;
+int col;
+int row_idx;
+int col_idx;
+
+int init_args() {
+  row_idx = 0;
+  col_idx = 0;
+  row = 10;
+  col = 10;
+  return 0;
+}
+
+int init_args() {
+}
+
+struct Matrix add(struct Matrix am1, struct Matrix am2) {
+  struct Matrix a_res;
+  init_args();
+  while (row_idx < row) {
+    while (col_idx < col) {
+      a_res.val[row_idx][col_idx] = am1.val[row_idx][col_idx]
+          + am2.val[row_idx][col_idx];
+      col_idx = col_idx + 1;
+    }
+    row_idx = row_idx + 1;
+  }
+  return a_res;
+}
+
+struct Matrix sub(struct Matrix sm1, struct Matrix sm2) {
+  struct Matrix s_res;
+  init_args();
+  while (row_idx < row) {
+    while (col_idx < col) {
+      s_res.val[row_idx][col_idx] = sm1.val[row_idx][col_idx]
+          + sm2.val[row_idx][col_idx];
+      col_idx = col_idx + 1;
+    }
+    row_idx = row_idx + 1;
+  }
+  return s_res;
+}
+
+struct Matrix mul(struct Matrix mm1, struct Matrix mm2) {
+  struct Matrix m_res;
+  init_args();
+  while (row_idx < row) {
+    while (col_idx < col) {
+      int cnt = 0;
+      int num = row;
+      m_res.val[row_idx][col_idx][0] = 0;
+      while (cnt < num) {
+        m_res.val[row_idx][col_idx] = m_res.val[row_idx][col_idx]
+            + mm1.val[row_idx][cnt] * mm2.val[cnt][col_idx];
+      }
+      col_idx = col_idx + 1;
+    }
+    row_idx = row_idx + 1;
+  }
+  return m_res;
+}
+
+int main() {
+  struct Matrix m1;
+  struct Matrix m2;
+  struct Matrix m3 = m1(add(m1, m2), sub(m1, m2));
+  struct Matrix Matrix = mul(m1, m2);
+}
+
+
+E3-1:
+struct Complex {
+  float real;
+  float imag;
+};
+
+struct Mess {
+  struct {
+    float tf_f1;
+    float tf_f2;
+  } two_floats[10];
+  int m_i;
+  int m_j;
+};
+
+struct Complex mat[10][10];
+
+int ridx;
+int cidx;
+int row;
+int col;
+
+int prepare_params() {
+  ridx = 0;
+  cidx = 0;
+  row  = 10;
+  col  = 10;
+  return 0;
+}
+
+struct Complex add(struct Complex a_c1, struct Complex a_c2) {
+  struct Complex a_res;
+  struct Mess a_mess;
+  a_mess.two_floats[0].tf_f1 = a_c1.real + a_c2.real;
+  a_mess.two_floats[0].tf_f2 = a_c1.imag + a_c2.imag;
+  return a_mess.m_i;
+}
+
+struct Complex sub(struct Complex s_c1, struct Complex s_c2) {
+  struct Complex s_res;
+  s_res.real = s_c1.real - s_c2.real;
+  s_res.imag = s_c1.imag - s_c2.imag;
+  return s_res;
+}
+
+int add_sub(struct Complex as_mat1[10][10],
+            struct Complex as_mat2[10][10],
+            int is_add) {
+  prepare_params();
+  while (ridx < row) {
+    while (cidx < col) {
+      if (is_add) {
+        mat[ridx][cidx] = add(as_mat1[ridx][cidx], as_mat2[ridx][cidx]);
+      } else {
+        mat[ridx][cidx] = sub(as_mat1[ridx][cidx], as_mat2[ridx][cidx]);
+      }
+      cidx = cidx + 1;
+    }
+    ridx = ridx + 1;
+  }
+  return 0;
+}
+
+int equals(struct Complex e_c1, struct Complex e_c2) {
+  return e_c1.real == e_c2.real && e_c1.imag == e_c2.imag;
+}
+
+int contains_helper(struct Complex ch_val, int ch_idx) {
+  if (ch_idx == 0) {
+    return equals(ch_val, mat[0][0]);
+  } else {
+    int tmp_ridx;
+    int tmp_cidx;
+    tmp_ridx = ch_idx;
+    tmp_cidx = 0;
+    while (tmp_cidx < col) {
+      if (equals(mat[tmp_ridx][tmp_cidx], ch_val)) {
+        return 1;
+      }
+      tmp_cidx = tmp_cidx + 1;
+    }
+    tmp_ridx = 0;
+    tmp_cidx = ch_idx;
+    while (tmp_ridx < row) {
+      if (equals(mat[tmp_ridx][tmp_cidx], ch_val)) {
+        return 1;
+      }
+      tmp_ridx = tmp_ridx + 1;
+    }
+    return contains_helper(ch_val, ch_idx - 1);
+  }
+}
+
+int contains(struct Complex c_val) {
+  prepare_params();
+  return contains_helper(c_val, row - 1);
+}
+
+int main() {
+  int found = 0;
+  struct Mess mess;
+  found = contains(mess.two_floats[9]);
+  if (!found) {
+    contains(mess);
+  }
+}

@@ -1,0 +1,26 @@
+一. 实验一环境配置
+1. 找一个 Ubuntu 20.04 安装教程(Windows 系统教程一般是推荐vmware 加上一个 Ubuntu20.04.iso 镜像文件);
+
+安装好了 Ubuntu20.04 进入系统后更新/etc/apt/sources.list(不然国内可能无法访问或者安装库时候速度很慢)，感谢 居然同学的sources.list [3.1 KB] ;
+
+安装flex bison，基本上实验一环境就搞定了;
+
+找一下flex和bison教程，根据appendix中的文法就可以链接flex bison库，生成词法与语法分析器了;
+每一步会耗费大家一些时间，不过后面几次实验就可以基于实验一环境快速实现了
+
+二. 给大家找了一些安装教程：
+1. windows 下 ubuntu20.04 虚拟机安装教程：
+windows按照Ubuntu20.04
+
+vmware 破解版安装：VM破解版（可以去官网下载，然后注册也行，估计大家使用正版软件，破解版只作为学术研究与课程作业）
+
+工具安装可以参考
+
+下载相关软件，并设置使用 gcc-7 版本
+apt update
+安装flex bison gcc-7
+apt install -qq -y build-essential flex bison unzip libbison-dev gcc-7
+将gcc链接替换为gcc-7（ubuntu20.04默认gcc版本是9.4.0）
+update-alternatives --install /usr/bin/gcc gcc
+/usr/bin/gcc-7 100
+
