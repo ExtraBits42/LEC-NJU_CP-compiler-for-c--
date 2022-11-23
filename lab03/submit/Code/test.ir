@@ -1,0 +1,125 @@
+FUNCTION func1 :
+PARAM a
+idx := #0
+len := #2
+m := #0
+LABEL label0 :
+IF idx < len GOTO label1
+GOTO label2
+LABEL label1 :
+temp0 := idx * #4
+temp0 := a + temp0
+temp1 := temp0
+temp2 := *temp1
+IF temp2 > m GOTO label3
+GOTO label4
+LABEL label3 :
+temp3 := idx * #4
+temp3 := a + temp3
+temp4 := temp3
+temp5 := *temp4
+m := temp5
+LABEL label4 :
+temp6 := idx + #1
+idx := temp6
+GOTO label0
+LABEL label2 :
+RETURN m
+FUNCTION func2 :
+PARAM p1
+PARAM p2
+temp7 := p1 / p2
+t1 := temp7
+temp8 := t1 * p2
+t2 := temp8
+temp9 := p1 - t2
+t3 := temp9
+RETURN t3
+FUNCTION main :
+arr_len := #2
+DEC temp10 16
+arr := &temp10
+DEC temp11 8
+sum_arr := &temp11
+idx1 := #0
+idx2 := #0
+LABEL label5 :
+IF idx1 < arr_len GOTO label6
+GOTO label7
+LABEL label6 :
+idx2 := #0
+LABEL label8 :
+IF idx2 < arr_len GOTO label9
+GOTO label10
+LABEL label9 :
+temp12 := idx1 * #8
+temp12 := arr + temp12
+temp13 := temp12
+temp14 := idx2 * #4
+temp14 := temp13 + temp14
+temp15 := temp14
+ARG arr_len
+temp17 := idx1 + idx2
+ARG temp17
+temp16 := CALL func2
+*temp15 := temp16
+temp18 := idx2 + #1
+idx2 := temp18
+GOTO label8
+LABEL label10 :
+temp19 := idx1 * #4
+temp19 := sum_arr + temp19
+temp20 := temp19
+temp22 := idx1 * #8
+temp22 := arr + temp22
+temp23 := temp22
+ARG temp23
+temp21 := CALL func1
+*temp20 := temp21
+temp24 := idx1 + #1
+idx1 := temp24
+GOTO label5
+LABEL label7 :
+temp26 := #0 * #8
+temp26 := arr + temp26
+temp27 := temp26
+temp28 := #0 * #4
+temp28 := temp27 + temp28
+temp29 := temp28
+temp30 := *temp29
+WRITE temp30
+temp32 := #0 * #8
+temp32 := arr + temp32
+temp33 := temp32
+temp34 := #1 * #4
+temp34 := temp33 + temp34
+temp35 := temp34
+temp36 := *temp35
+WRITE temp36
+temp38 := #1 * #8
+temp38 := arr + temp38
+temp39 := temp38
+temp40 := #0 * #4
+temp40 := temp39 + temp40
+temp41 := temp40
+temp42 := *temp41
+WRITE temp42
+temp44 := #1 * #8
+temp44 := arr + temp44
+temp45 := temp44
+temp46 := #1 * #4
+temp46 := temp45 + temp46
+temp47 := temp46
+temp48 := *temp47
+WRITE temp48
+temp50 := #0 * #4
+temp50 := sum_arr + temp50
+temp51 := temp50
+temp52 := *temp51
+WRITE temp52
+temp54 := #1 * #4
+temp54 := sum_arr + temp54
+temp55 := temp54
+temp56 := *temp55
+WRITE temp56
+RETURN #0

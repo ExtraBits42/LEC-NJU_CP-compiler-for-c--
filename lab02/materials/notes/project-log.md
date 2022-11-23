@@ -47,7 +47,7 @@ None
 
 ==2022/10/28==:
 - Makefile:
-	- 编写makefile时使用'\'进行换行，无论是依赖要求还是命令都可以拆分成多行
+	- 编写makefile时使用'\\'进行换行，无论是依赖要求还是命令都可以拆分成多行
 - C Language:
 	- 关键字static、extern
 
